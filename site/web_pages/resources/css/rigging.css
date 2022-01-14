@@ -1,0 +1,29 @@
+*{
+  margin: 0;
+  clear: both;
+}
+body{
+  padding: 0 1% 0 1%;
+  background-color: #00ffff;
+  margin: 0 1% 0 1%;
+  background-color: grey;
+}
+body>div{
+  background-color: white;
+  padding: 0 1% 0 1%;
+}
+h1,h2,h3,h4,h5,h6,p{
+  text-align: left;
+  width: 90%;
+  margin-bottom: 20px;
+}
+section,nav{
+  margin-bottom: 40px;
+}
+img{
+  width: 80%;
+  float: left;
+}
+iframe{
+width: 80%;
+}

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<title>Introduction to rigging in Maya - Part 8 - Rigging the fingers and thumbs</title>
+
+<link rel="stylesheet" type="text/css" href="resources/css/rigging.css">
+</head>
+<body>
+<div class="">
+  <header>
+  <nav>
+  <div>
+  <table>
+  <tr>
+  <td>
+  <label for="sel">section:</label>
+  </td>
+  <td>
+  <select id="sel">
+  <option>Introduction</option>
+  <option>Finishing the leg</option>
+  <option>Creating the finger controls</option>
+  <option>Adding finger attributes</option>
+  <option>Creating the finger curl</option>
+  <option>Creating the scrunch</option>
+  <option>Adding the finger spread</option>
+  <option>Adding the relax post</option>
+  <option>Copying the Set Driven Keys</option>
+  <option>Toe controls</option>
+  <option>Make it fit for purpose</option>
+  </select>
+  </td>
+  </tr>
+  </table>
+  </div>
+  </nav>
+
+  <div>
+  <h1>Introduction to rigging in Maya - Part 8 - Rigging the fingers and thumbs</h1>
+
+  <img src="resources/img/Introduction to rigging in Maya - Part 8 - Rigging the fingers and thumbs.jpg" alt="Introduction to rigging in Maya - Part 8 - Rigging the fingers and thumbs.jpg" width="100px">
+  </div>
+  </header>
+
+  <section>
+  <h2>Tutorial assets</h2>
+
+  <p>Click <a href="https://assets.3dtotal.com/tutorial-resources/1864-tid-3dt-rigging-zip.jloyd0.zip">here</a> to download assets to accompany this tutorial</p>
+  </section>
+
+  <section>
+    <h2>Previous chapters</h2>
+
+    <p><a href="1.Part_1_Introduction.html" target="_blank">Maya rigging: Introduction to rigging</a></p>
+    <p><a href="2.Part_2_Rigging_a_human_torso.html" target="_blank">Maya rigging: Introduction to rigging a human torso</a></p>
+    <p><a href="3.Part_3_Rigging_the_neck_and_head.html" target="_blank">Maya rigging: Introduction to rigging the neck and the head</a></p>
+    <p><a href="4.Part_4_Rigging_the_shoulders_and_arms.html" target="_blank">Maya rigging: Introduction to rigging the shoulder and the arms</a></p>
+    <p><a href="5.Part_5_Rigging_the_hands.html" target="_blank">Maya rigging: Introduction to rigging the hands</a></p>
+    <p><a href="6.Part_6 _Rigging_the_legs.html" target="_blank">Maya rigging: Introduction to rigging the legs</a></p>
+    <p><a href="7.Part_7 _Rigging_the_feet.html" target="_blank">Maya rigging: Introduction to rigging the feet</a></p>
+  </section>
+
+  <section>
+  <h2>Introduction</h2>
+
+  <p>In this tutorial, we will add all the controls to pose the fingers, and also finish off the leg by adding the ability to twist it. Taking advantage of the hierarchy that we created for each control, we can add layers of functionality for the animator, giving them choices to best decide how he/she wants to animate. The first level of control will let the animator pose all the fingers in one hit. Allowing animators to create poses quickly and simply is very useful during the blocking stage of the animation when roughing out ideas. The second level of control will allow the animator to pose each finger or the thumb individually, and the final level of control will be to individually pose each phalange. (Phalanges are the separate bones of the fingers or toes). These 2 latter layers of control allow the animator to refine the poses, which is necessary if you need to wrap the fingers around objects, for example.</p>
+  <p>We will create a new control to house all the attributes to pose the fingers first, and then drive the movement through the Set Driven Key tool. If you have yet to get used to this tool, I think that moment has come, so prepare for über-levels of SDK madness.</p>
+  <p>So, with fingers at the ready…</p>
+  <iframe title="vimeo-player" src="https://player.vimeo.com/video/94355896?h=c07fa4d443" width="640" height="380" frameborder="0" allowfullscreen></iframe>
+  </section>
+
+  <section>
+  <h2>Finishing the leg</h2>
+
+  <p>Something I forgot to add during the last tutorial is the ability to twist the IK leg, so let's do that before we take care of the fingers. Start by selecting l_leg_IK_ctrl and going Window > General Editors > Connection Editor. This should pop the l_leg_IK_ctrl into the Outputs column. Now select l_leg_IK and hit Reload Right in the Connection Editor window. In the Outputs column, highlight ‘legTwist' and in the Inputs column, highlight ‘twist'. Repeat the step for the right leg.</p>
+  <img src="resources/img/Adding the ability to twist the IK leg.jpg" alt="Adding the ability to twist the IK leg.jpg" width="100px">
+  <p><em>Adding the ability to twist the IK leg</em></p>
+  <p>In the interest of consistency, the next thing I did was to edit the current setup when twisting the IK foot using the rotX, rotY and rotZ attributes that are housed on the l_leg_IK_ctrl and the r_leg_IK_ctrl. Where we left it last time, using the rotY attribute when both controls were selected resulted in both feet rotating in the same direction, as did the twist using the rotZ attribute. To fix this, I selected l_ankle_loc and r_ankle_loc, highlighted the rotate channels for both locators, held down the RMB and went Break Connections. Next, I created the following expression in the Expression Editor:</p>
+  <p>l_ankle_loc.rotateX = l_leg_IK_ctrl.rotX ;</p>
+  <p>l_ankle_loc.rotateY = l_leg_IK_ctrl.rotY ;</p>
+  <p>l_ankle_loc.rotateZ = l_leg_IK_ctrl.rotZ ;</p>
+  <p>r_ankle_loc.rotateX = r_leg_IK_ctrl.rotX ;</p>
+  <p>r_ankle_loc.rotateY = r_leg_IK_ctrl.rotY *-1;</p>
+  <p>r_ankle_loc.rotateZ = r_leg_IK_ctrl.rotZ *-1;</p>
+  <p>You can create this as one expression or separate the left side from the right side as I did. Try out the result by using the rotY and rotZ attribute and you should see the difference.</p>
+  <img src="resources/img/Using an expression to get consistent behavior when twisting the IK foot control.jpg" alt="Using an expression to get consistent behavior when twisting the IK foot control.jpg" width="100px">
+  <p><em>Using an expression to get consistent behavior when twisting the IK foot control</em></p>
+  </section>
+
+  <section>
+  <h2>Creating the finger controls</h2>
+
+  <p>In the Top view, use the CV Curve Tool (with Curve degree to set 3 Cubic) to draw around the palm of the hand. Then use the CV Curve Tool to draw around each finger individually and the thumb. You should now have 6 different curve shapes sitting on the grid in the perspective view. Quickly go in and name them accordingly as so: l_thumb_ctrl, l_index_ctrl, l_middle_ctrl, l_ring_ctrl, l_pinky_ctrl and l_fingers_ctrl (the palm shape).</p>
+  <p>Now select l_thumb_ctrl, l_index_ctrl, l_middle_ctrl, l_ring_ctrl, l_pinky_ctrl and parent them under l_fingers_ctrl. With l_fingers_ctrl selected, go Modify > Center Pivot and then position, scale and rotate it so it sits closely to the hand geometry. When you are happy with the placement, go Modify > Freeze Transformations to tidy up the Channel Box and give it a greenish color using the Drawing Overrides in the Attribute Editor. Then parent l_fingers_ctrl under l_palm_ctrl so it will follow along with the hand. The last thing to do is in the Channel Box: highlight all the Translate, Rotate and Scale attributes for all the new controls and go RMB > Lock and Hide Selected. We will add some custom attributes in the next step.</p>
+  <img src="resources/img/The setup for the finger controls.jpg" alt="The setup for the finger controls.jpg" width="100px">
+  <p><em>The setup for the finger controls</em></p>
+  </section>
+
+  <section>
+  <h2>Adding finger attributes</h2>
+
+  <p>Start by selecting l_fingers_ctrl and go Modify > Add Attribute or Edit > Add Attribute in the Channel Box. Here is a breakdown of the attributes that I added to this control:</p>
+  <img src="resources/img/Adding attributes to the finger controls_1.jpg" alt="Adding attributes to the finger controls_1.jpg" width="100px">
+  <p>Now select l_thumb_ctrl, l_index_ctrl, l_middle_ctrl, l_ring_ctrl, l_pinky_ctrl and go Modify > Add Attribute and add the following:</p>
+  <img src="resources/img/Adding attributes to the finger controls_2.jpg" alt="Adding attributes to the finger controls_2.jpg" width="100px">
+  <img src="resources/img/Adding attributes to the finger controls_3.jpg" alt="Adding attributes to the finger controls_3.jpg" width="100px">
+  <p><em>Adding attributes to the finger controls</em></p>
+  </section>
+
+  <section>
+  <h2>Creating the finger curl</h2>
+
+  <p>Open up the SDK window by going Animate > Set Driven Key > Set. With l_fingers_ctrl selected, click on the Load Driver button. We now need to select all the _auto nodes that we created when creating the control hierarchy for our controls to become the driven objects. It is important that we DO NOT USE THE ANIMATION CONTROLS IN THE VIEWPORT at this stage. Here is a list of the _auto nodes to select to create the finger curl: l_thumbA_ctrl_auto, l_thumbB_ctrl_auto, l_thumbC_ctrl_auto, l_indexA_ctrl_auto, l_indexB_ctrl_auto, l_indexC_ctrl_auto, l_indexD_ctrl_auto, l_middleA_ctrl_auto, l_middleB_ctrl_auto, l_middleC_ctrl_auto, l_middleD_ctrl_auto, l_ringA_ctrl_auto, l_ringB_ctrl_auto, l_ringC_ctrl_auto, l_ringD_ctrl_auto, l_pinkyA_ctrl_auto, l_pinkyB_ctrl_auto, l_pinkyC_ctrl_auto and finally l_pinkyD_ctrl_auto. Phew.</p>
+  <p>Just in case we need to make that selection again, with the _auto nodes selected, go Create > Sets > Quick Select Set, give it a name and hit OK. You can now find the selection set in the Outliner. Another way to get to the _auto nodes or any other node in a hierarchy is to use pickwalking. Simply select the necessary control curves in the viewport and then hit the up arrow on the keyboard. So, with the _auto nodes selected, hit the Load Driven button in the SDK window.</p>
+  <img src="resources/img/Creating the finger curl.jpg" alt="Creating the finger curl.jpg" width="100px">
+  <p><em>Creating a Quick Select Set so we can quickly find and select the necessary nodes</em></p>
+  <p>In the SDK window, highlight Curl in the top-right box, highlight all the _auto nodes in the bottom-left box and highlight Rotate X (the axis that creates the finger curl) in the bottom-right box. Everything should be in the default pose, if not, zero out all rotational values for the _auto nodes and the Curl attribute on l_fingers_ctrl. Once ready, hit Key on the SDK window. Now, increase the Curl attribute to 10 on l_fingers_ctrl and use the Rotate X attribute only for all the _auto nodes to create a fist pose. Once you have the pose hit Key on the SDK window. Now take the Curl attribute down to -10 on the l_fingers_ctrl and curl the fingers in the opposite direction using the Rotate X attribute for each _auto node. A quick note: to pose the thumb here, I used a combination of Rotate X and Rotate Z. This can be a pretty unnatural pose but it can be useful when creating fast movement. Once you are happy with that pose, again, hit Key on the SDK window.</p>
+  <p>You should now be able to drive the transition from one pose to another using the Curl attribute. To use this attribute or any other from the Channel Box, I find it easier to highlight the attribute word and then middle-mouse drag in the viewport to edit the value interactively.</p>
+  <img src="resources/img/Creating the finger curl_2.jpg" alt="Creating the finger curl_2.jpg" width="100px">
+  <p><em>Using the Set Driven Key tool to drive the newly created attributes</em></p>
+  </section>
+
+  <section>
+  <h2>Creating the scrunch</h2>
+
+  <p>Make sure everything is back in the default pose so we can add the scrunch pose next. It's pretty hard to describe this pose, so do have a good look at the images. If I had to explain it, I would say that it is the pose you'd need if you were going to scrape your fingers against a blackboard. For this we do not need to include the metacarpal joints so just take the following into the SDK window as the driven objects: l_thumbB_ctrl_auto, l_indexB_ctrl_auto, l_indexC_ctrl_auto, l_indexD_ctrl_auto, l_middleB_ctrl_auto, l_middleC_ctrl_auto, l_middleD_ctrl_auto, l_ringB_ctrl_auto, l_ringC_ctrl_auto, l_ringD_ctrl_auto, l_pinkyB_ctrl_auto, l_pinkyC_ctrl_auto and finally l_pinkyD_ctrl_auto.</p>
+  <p>This time in the SDK window, in the top-right box, highlight Scrunch; in the bottom-left window, highlight all the _auto nodes and in the bottom-right window, once again, highlight Rotate X. Hit Key to create the default pose. Now pop the Scrunch value up to 10 on the l_fingers_ctrl and using the _auto nodes, create a pose that resembles a scrunch as described above. Once you are happy with the pose, make sure all the relevant objects and attributes are highlighted in the SDK window and hit Key. Then take the Scrunch attribute down to -10, create another pose in the opposite direction and again hit Key in the SDK window.</p>
+  <img src="resources/img/Creating the scrunch.jpg" alt="Creating the scrunch.jpg" width="100px">
+  <p><em>The scrunch pose: useful for scraping your digital fingernails against your digital blackboard</em></p>
+  </section>
+
+  <section>
+  <h2>Adding the finger spread</h2>
+
+  <p>For the fingers to spread, we only need to take the following into the SDK window as driven objects: l_thumbA_ctrl_auto, l_thumbB_ctrl_auto, l_indexA_ctrl_auto, l_indexB_ctrl_auto, l_middleA_ctrl_auto, l_middleB_ctrl_auto, l_ringA_ctrl_auto, l_ringB_ctrl_auto, l_pinkyA_ctrl_auto, l_pinkyB_ctrl_auto and l_pinkyC_ctrl_auto. In the top-right window, highlight Spread; in the bottom-left window, highlight all the _auto nodes and in the bottom-right window, highlight Rotate Z (the attribute that allows the fingers to spread). With everything in the default pose, hit Key on the SDK window.</p>
+  <p>Now, take the Spread attribute up to 10 and use the Rotate Z attribute for the _auto nodes to spread the fingers apart. Hit Key when you are happy with the pose on the SDK window. Then, take the Spread attribute to -10, use the _auto nodes to bring the fingers together and again, hit Key on the SDK window. For the thumb, I used a combination of Rotate X and Rotate Z to get it to sit cleanly beside the index finger.</p>
+  <img src="resources/img/Adding the finger spread.jpg" alt="Adding the finger spread.jpg" width="100px">
+  <p><em>The spread poses from +10 to -10</em></p>
+  </section>
+
+  <section>
+  <h2>Adding the relax post</h2>
+
+  <p>Creating the relaxed pose is a similar process to creating the curl pose except the thumb was not included. Bring in all the _auto nodes for all the fingers and it's pretty much a softened version of a fist. If you imagine, relaxing your pinky finger on your hand, you'll notice it slightly brings along with it the ring and the middle finger. This was the pose I had when I set the value of the Relax pose to 10. For -10, I pretty much did the opposite. So, if you imagine relaxing the index finger, the middle and ring also come along for the ride slightly. Again, have a look at the images that should give a clearer idea of the poses.</p>
+  <img src="resources/img/Adding the relax post.jpg" alt="Adding the relax post.jpg" width="100px">
+  <p>The fingers in the relaxed pose states</p>
+  </section>
+
+  <section>
+  <h2>Copying the Set Driven Keys</h2>
+
+  <p>What I'd like to do next is extrapolate the SDKs that we have created for the entire hand and pop them onto each individual finger control. This will allow the animator to pose each finger independently if desired. Now there are many ways to do this. For example, we could simply note down the values we used to create the poses beforehand and feed them into the new controls. Or better still, we could use a script that handles this repetitive task for us. The latter is usually what I do but as I have not been given permission to share the script that handles this for me, we will do it a third way. Using a combination of the SDK window and the Graph Editor, we will first create an SDK for our new Driver object and then we will copy the animation curve data from one control (l_fingers_ctrl) and paste it onto another control. It may sound a little confusing and be a little unorthodox, but once you get into the swing of this method, you should be able to pretty quickly get everything working.</p>
+  <p>I'll give you a working example now and then you can employ this process for the rest of the controls. So let's copy the SDKs from the Curl attribute of l_fingers_ctrl and paste them to the Curl attribute of l_index_ctrl. Start by opening up the SDK window and set l_index_ctrl as the Driver object. Then select l_indexA_ctrl_auto, l_indexB_ctrl_auto, l_indexC_ctrl_auto, l_indexD_ctrl_auto and load them in as the Driven objects. Highlight Curl in the top-right box, highlight all 4 _auto nodes in the bottom-left box, Rotate X in the bottom-right window and hit Key to set the initial pose.</p>
+  <img src="resources/img/Copying the Set Driven Keys_1.jpg" alt="Copying the Set Driven Keys_1.jpg" width="100px">
+  <p><em>Setting the initial Set Driven Key for l_index_ctrl</em></p>
+  <p>Now with l_indexA_ctrl_auto, l_indexB_ctrl_auto, l_indexC_ctrl_auto, l_indexD_ctrl_auto selected, pop into the Graph Editor (Windows > Animation Editors). In here, you should see all the animation data for the SDKs we have created in the previous steps. On the left-hand side, you will also see the attributes driving the motion. Have a look under l_indexA_ctrl_auto and you will see 3 different attributes are driving the Rotate X. They are the l_fingers_ctrl.Curl, l_fingers_ctrl.Relax and the attribute we just added, l_index_ctrl.Curl. What we want to do now is copy the animation data from l_fingers_ctrl.Curl to l_index_ctrl.Curl, but before we do that, we need to edit a few settings in the Graph Editor. So in the Graph Editor window, go Edit > Paste (Options). In here, set the Time range to Clipboard, the Paste method to Replace and the Replace region to Entire curve.</p>
+  <p>Now, highlight l_fingers_ctrl.Curl and select the animation curve. Hit Ctrl+C on the keyboard to copy it. Then highlight l_index_ctrl.Curl and hit Ctrl+V to paste the animation curve into here. If you use the Curl attribute now on the l_index_ctrl, you should see that it is now also creating the same motion as l_fingers_ctrl.Curl. Now all we need to do is copy and paste the animation for the rest of the controls. It may seem like quite a long winded process but once you've done it a few times, you should be able to get through it pretty quickly.</p>
+  <p>Once complete, you should now have 3 levels of controls. You can use the l_fingers_ctrl to drive all the fingers at once, the individual finger controls allow you to make broad changes to each finger and lastly, the control curves around each phalange allow you to add minute changes to the fingers.</p>
+  <img src="resources/img/Copying the Set Driven Keys_2.jpg" alt="Copying the Set Driven Keys_2.jpg" width="100px">
+  <p><em>Using the Graph Editor to copy the Set Driven Keys from l_fingers_ctrl to l_index_ctrl</em></p>
+  </section>
+
+  <section>
+  <h2>Toe controls</h2>
+
+  <p>The last thing I've done is add some joints and controls to drive the toes. This will be useful for adding extra detail to the foot as it is animated. For example, as weight is put onto the foot, we can spread the toes slightly to illustrate that weight coming down. Or it will be very useful if you need to do an animation where a little piggy goes to the market. I'm not going to go into detail of how I created this as it is pretty much the finger setup but just for the toes instead, so do please check the previous tutorials if you are having any trouble.</p>
+  <img src="resources/img/Toe controls.jpg" alt="Toe controls.jpg" width="100px">
+  <p><em>Using a similar setup to the fingers to add extra control to the toes</em></p>
+  </section>
+
+  <section>
+  <h2>Make it fit for purpose</h2>
+
+  <p>For the fingers, we've added a set of controls that should give the animator plenty of flexibility to get the hand into a wide range of poses. What we are trying to do here though is create a rig that will be suitable for as many scenarios as possible. Sometimes you may find it is best and also more efficient to create a rig that fulfills the set task at hand. For example, if you have a character that sits behind a desk, never stands up and for the sake of it, let's presume we hardly see his legs in any of the shots. Do you need to rig his legs? I'm guessing not. You may be tempted to, or you may need a very simplified rig to add some subtle movement, but other than that, it would be more worthwhile to spend time on areas of the rig that will be seen or will need to be animated in shot.</p>
+  <iframe title="vimeo-player" src="https://player.vimeo.com/video/94355896?h=c07fa4d443" width="640" height="380" frameborder="0" allowfullscreen></iframe>
+  </section>
+
+  <section>
+  <h2></h2>
+
+  <p></p>
+  </section>
+
+</div>
+</body>
+</html>

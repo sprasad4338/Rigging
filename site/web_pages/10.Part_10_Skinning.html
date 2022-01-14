@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<title>Introduction to rigging in Maya - Part 10 - Skinning</title>
+
+<link rel="stylesheet" type="text/css" href="resources/css/rigging.css">
+</head>
+<body>
+<div class="">
+  <header>
+  <nav>
+  <div>
+  <table>
+  <tr>
+  <td>
+  <label for="sel">section:</label>
+  </td>
+  <td>
+  <select id="sel">
+  <option>Create a quick select set</option>
+  <option>Create the smooth bind</option>
+  <option>Blocking the weights</option>
+  <option>Mirror the blocked weights</option>
+  <option>Keyframe the poses</option>
+  <option>Smoothing out the weights</option>
+  <option>Skinning the shoulder region</option>
+  <option>Cleanup, mirror and wrap</option>
+  <option>Skinning the eyes and the nails</option>
+  </select>
+  </td>
+  </tr>
+  </table>
+  </div>
+  </nav>
+
+  <div>
+  <h1>Introduction to rigging in Maya - Part 10 - Skinning</h1>
+
+  <img src="resources/img/Introduction to rigging in Maya - Part 10 - Skinning.jpg" alt="Introduction to rigging in Maya - Part 10 - Skinning.jpg" width="100px">
+  </div>
+  </header>
+
+  <section>
+  <h2>Tutorial assets</h2>
+
+  <p>Click <a href="https://legacy.3dtotal.com/admin/new_cropper/tutorial_resources/final_3dt_rigging.zip">here</a> to download assets to accompany this tutorial</p>
+  </section>
+
+  <section>
+    <h2>Previous chapters</h2>
+
+    <p><a href="1.Part_1_Introduction.html" target="_blank">Maya rigging: Introduction to rigging</a></p>
+    <p><a href="2.Part_2_Rigging_a_human_torso.html" target="_blank">Maya rigging: Introduction to rigging a human torso</a></p>
+    <p><a href="3.Part_3_Rigging_the_neck_and_head.html" target="_blank">Maya rigging: Introduction to rigging the neck and the head</a></p>
+    <p><a href="4.Part_4_Rigging_the_shoulders_and_arms.html" target="_blank">Maya rigging: Introduction to rigging the shoulder and the arms</a></p>
+    <p><a href="5.Part_5_Rigging_the_hands.html" target="_blank">Maya rigging: Introduction to rigging the hands</a></p>
+    <p><a href="6.Part_6 _Rigging_the_legs.html" target="_blank">Maya rigging: Introduction to rigging the legs</a></p>
+    <p><a href="7.Part_7 _Rigging_the_feet.html" target="_blank">Maya rigging: Introduction to rigging the feet</a></p>
+    <p><a href="8.Part_8_Rigging_the_fingers_and_thumbs.html" target="_blank">Maya rigging: Introduction to rigging the fingers and thumbs</a></p>
+    <p><a href="9.Part_9_Cleaning_up_the_rig.html" target="_blank">Maya rigging: Introduction to cleaning up the rig</a></p>
+    <p>We have now reached the stage that is known variously as enveloping, binding or skinning. I'll refer to it throughout this tutorial as skinning. So what is it exactly? Skinning is the process of assigning how much influence a joint should have over a vertex. By doing so, we define how our skeleton will deform the geometry. We will create this relationship using a skinning solution known as Smooth Bind in <a href="http://www.autodesk.co.uk/products/autodesk-maya/overview">Maya</a>. Once this relationship has been created, we will refine the initial bind calculation through a process known as painting weights.</p>
+    <p>For me, it is imperative that we spend as much time as possible refining the skinning for our characters. It is here that we create the foundation from which the majority of the deformation will come. We can always use extra tools and techniques to push the believability of the deformation, such as using corrective blend shapes or a muscle setup. However, if the skinning hasn't first been pushed to its limits, then these blend shapes and muscle setups will simply not cut the mustard.</p>
+    <p>I tend to employ the same method for skinning as I do the majority of CG tasks that I deal with. That is to break it down into the 3 distinct stages: blocking, smoothing and refining. This way, I don't get bogged down in the fine details early on and then realize I need to make some drastic broad changes.</p>
+    <p>With that in mind, here is a rundown of how I will tackle the joys of skinning. Once we have created the initial bind, we will then get rid of the default calculation by making every joint have 100% influence over the vertices that surround it. This is the blocking stage and the reason I do this rather than simply fixing what needs fixing is because I want to be fully responsible for the weighting of the character. As much as Maya will do its dandiest to do a great job, I simply like to have the final say. What we will end up with at this stage is a very chunky looking mesh as it deforms.</p>
+    <p>After the initial blocking, we will then go through and smooth out the weights between 2 to 3 joints at a time. During this stage, we will also set many keyframes on the rig to get a better idea of how the mesh transitions from one pose to another. After all, it's the movement between poses we need to focus on, not just the key poses that we hit. While we are doing this, we will want to maintain as many of the natural creases and bulges that occur as the body articulates. If you are going for a cartoony feel, though, you may try to avoid adding the inclusion of wrinkles and folds.</p>
+    <p>Lastly, we will go through and examine the deformation with a fine-toothed comb and fix any anomalies. We'll use a multitude of tools for this, such as the Component Editor and then the Weight Hammer. We'll be aiming to get the skinning to take care of around 80% of the final outcome. The further 20% will be handed through secondary deformation methods that we'll look at further next time. As our character is symmetrical, on a positive, we only need to focus on skinning half the mesh. After that, we can simply mirror the weights over. I tend to do this at numerous stages throughout the skinning process as it allows me to get a good feel for how the character deforms as a whole.</p>
+    <p>Just a quick note on the relationship between the steps and the video for this tutorial: usually, I try to keep the steps in sync with the video, but as skinning is a bit of a different beast, you may find that they do not tally exactly. The steps have been written as a broad guide to my approach, while the video will enable you to follow point by point.</p>
+    <p>So, without further ado, lets get skinning…</p>
+  <section>
+  <h2>Create a quick select set</h2>
+
+  <p>The first thing I want to do is select all the joints that will be part of the bind, and pop them into a Quick Select Set. That way, we can quickly select them all or easily find a specific joint should we need to. With over 200 odd joints to select, I'm not going to list them all, but here is a quick breakdown of which joints to select and which not to. Select the IK spine joint chain, the FK hip, the leg, the arm and all the twist joints, the hand, finger and toe joints, the neck and the head joints, and the scapula and clavicle joints. Do not select the FK spine joints, the FK and IK leg and arm joints, and finally, do not select any of the end joints.</p>
+  <p>Once you have your selection of joints, go Create > Sets > Quick Select Set. Give your set a name (I called it male_bind_set) and hit OK. You should now be able to open up the new set in the Outliner and select all the joints that we will use for the bind. If you forget to pop any necessary joints into the selection set, simply select the extra joints and middle-mouse drag them onto the quick select set node in the Outliner.</p>
+  <img src="resources/img/Create a quick select set.jpg" alt="Create a quick select set.jpg" width="100px">
+  <p><em>The many, many joints that will be used to bind the mesh</em></p>
+  </section>
+
+  <section>
+  <h2>Create the smooth bind</h2>
+
+  <p>Now, select all the joints from the male_bind_set, shift-select male_geo and in the Animation menu set, go Skin > Bind Skin > Smooth Bind (Options). Now set the following settings and leave everything else as it is:</p>
+  <p>Bind To: Selected joints</p>
+  <p>Bind Method: Closest distance</p>
+  <p>Skinning Method: Classic Linear</p>
+  <p>Normalize Weights: Interactive</p>
+  <p>Max Influences: 8</p>
+  <p>A couple of notes regarding some of the settings: the Bind Method is the skinning algorithm used to create the bind. The default method is the Classic Linear, also known as Linear Blend Skinning (LBS). I probably use this method 90% of the time but due to the maths behind it, it does cause issues when twisting the joint. (This is referred to as the candy wrapper effect, as the image illustrates, and it is why we have added extra twist joints to distribute the weight). Dual Quaternion performs a different calculation for the bind and is great for reducing the candy wrapper effect but it gives me headaches in areas such as the shoulder and the hips. I tend to find that with Classic Linear, I can get 80-90% of the way there and then additional corrective shapes can finish it off.</p>
+  <img src="resources/img/Create the smooth bind.jpg" alt="Create the smooth bind.jpg" width="100px">
+  <p><em>Twisting a joint on the X-axis often creates the dreaded candy wrapper effect</em></p>
+  <p>Normalize weights set to Interactive will only allow the weight value for each vertex to total 1 (100%). That means if you have 2 joints and you are adding influence to a vertex from either of those joints, every time you add influence from one joint, it will take away influence from the other. If you set Normalize weights to Post, you can go beyond the value of 1 as it presumes that you will fix this later on. I tend to find that I end up with vertices flying around with this setting so Interactive is my preferred setting.</p>
+  <p>Once you have set those settings, hit Bind Skin and then rotate a few controls around to test out the default bind.</p>
+  <img src="resources/img/Create the smooth bind_2.jpg" alt="Create the smooth bind_2.jpg" width="100px">
+  <p><em>The settings I tend to use for skinning organic characters</em></p>
+  </section>
+
+  <section>
+  <h2>Blocking the weights</h2>
+
+  <p>The next thing I tend to do is to get rid of all the default weights and rebuild everything manually. This is because I like to take full responsibility for the weights, and doing this helps to eradicate any odd floating vertex that can occur from the initial bind. It will obviously take longer to get to the end result but that end result is usually a lot cleaner than simply working on top of the initial bind.</p>
+  <p>So, start by selecting male_geo and go Skin > Edit Smooth Skin > Paint Skin Weights Tool (Options). This tool here will probably be used for around 80-90% of the skinning process. You'll find all the joints used for the bind in the Influences box and also a selection of options to control the type of brush and the strength and size. I'll be editing the strength and size interactively by holding down the B key (size) and left-mouse-dragging in the viewport or holding down the M key (strength). This is exactly the same as using the Sculpt Geometry Tool or sculpting in <a href="http://www.autodesk.com/products/mudbox/overview">Mudbox</a>.</p>
+  <p>Still in the Paint Skin Weights Tool, set the Mode to Paint, the Paint operation to Replace, the Opacity to 1 and the Value to 1. Now select hip_FK_jnt from the Influences list or hold down the RMB over the joint in the viewport and when the marking menu pops up, drop it on Select Influence. With that joint selected, hit the Flood button on the Paint Skin Weights Tool. This joint now has 100% influence over the entire mesh. Try rotating another control and you'll see that it has no effect.</p>
+  <img src="resources/img/Blocking the weights.jpg" alt="Blocking the weights.jpg" width="100px">
+  <p><em>Rebuilding the skinning from scratch</em></p>
+  <p>Now, we will let each joint have 100% influence over the vertices that surround it. I like to start from the end of the toes and work inwards but you can also work from the core (hip) outwards. So, select l_bigToeC_jnt for example and then using a flat brush profile, paint over the vertices around that joint. Once you have done so, use the padlock icon to lock the weights of that joint or you can hold down the RMB over the joint and go Lock Influence. Now select l_bigToeB_jnt, paint the vertices around that joint and again, lock the weights. As we do this, we can only ever take influence away from the hip_FK_jnt as we are locking the other influences as we go. Once you have blocked out the left-hand side (we'll mirror this over later) each joint should have 100% influence over a set of vertices.</p>
+  <p>With everything blocked out, try rotating the joints and see what you get. It will most probably be a very rigid bind but do not fret: this is what we are after. At least we know now that a joint in the arm does not affect a vertex on the chin, or the toe joint does not pull a vertex from the knee.</p>
+  <img src="resources/img/Blocking the weights_2.jpg" alt="Blocking the weights_2.jpg" width="100px">
+  <p><em>An example of some of the blocked out regions</em></p>
+  </section>
+
+  <section>
+  <h2>Mirror the blocked weights</h2>
+
+  <p>At this stage, I like to mirror the weighting from the left side to the right side. This model is symmetrical so it should work without any bother, but I've found that the Mirror Weights tool also works pretty well with slightly asymmetrical characters. I say 'pretty well' as you will no doubt have to go in and do some manual cleanup. To mirror the weights, select the mesh and go Skin > Edit Smooth Skin > Mirror Skin Weights (Options). As I've weight painted the left-side of the mesh, I set the Mirror across attribute to YZ and enable Direction. Once you've done this, rotate the same control for both the left and the right side to see if the weighting has cleanly been mirrored.</p>
+  <img src="resources/img/Mirror the blocked weights.jpg" alt="Mirror the blocked weights.jpg" width="100px">
+  <p><em>The settings I use to mirror the weights from the characters left-hand side to the right-hand side</em></p>
+  </section>
+
+  <section>
+  <h2>Keyframe the poses</h2>
+
+  <p>Before going in and refining the weighting, I like to go through and set some rotational keys on the controls. All the controls are set to FK as it is easier for me to get a clearer idea of how an individual joint affects the surrounding vertices. Again, I start with the toes, rotating each control and setting keys every 5 frames or so. This allows me to get a good idea of how the character deforms from one pose to another, and weight painting while the mesh is in pose makes it sometimes easier to refine the weights. The results of our weight painting will also be a lot clearer if we can see him animated, as a rigid pose will not reveal anything about how each joint influences the surrounding vertices.</p>
+  <img src="resources/img/Keyframe the poses.jpg" alt="Keyframe the poses.jpg" width="100px">
+  <p><em>Posing the mesh and setting keyframes so we can see the results on a deforming mesh</em></p>
+  </section>
+
+  <section>
+  <h2>Smoothing out the weights</h2>
+
+  <p>Now we come to getting some smoother results from our weights. I tend to do between 1 to 2 passes of smoothing depending on the complexity and the resolution of the mesh. My approach to smoothing out the weights is something like so: first I select the mesh and go back into the Paint Skin Weights Tool. I then lock all the influence joints, except 2. As I like to work from the toes and move inwards, the 2 I leave unlocked are l_bigToeC_jnt and l_bigToeA_jnt. I then set the Paint operation to Smooth and paint between the 2 unlocked joints. With only these 2 joints unlocked, I can only send weight between these 2 joints and therefore, the Smooth operation won't randomly send weighting to an area that I don't want it to. I tend to try and only smooth between just 2 joints as much as possible but in some regions, you'll find that you'll need to smooth between 3, 4 or possibly more joints. The pelvis region is a good example of this as the legs and the spine all come together here.</p>
+  <img src="resources/img/Smoothing out the weights.jpg" alt="Smoothing out the weights.jpg" width="100px">
+  <p><em>Smoothing out the weights between 2 unlocked influence objects</em></p>
+  <p>As I smooth out the weights, I try to keep a lot of the natural creases and bulges that occur when a body deforms. If I was going for something cartoony, I would probably avoid creases but as we are trying to create the illusion that this character has an underlying skeleton, muscle and fat, maintaining creases and bulges helps to sell the effect.</p>
+  <img src="resources/img/Smoothing out the weights_2.jpg" alt="Smoothing out the weights_2.jpg" width="100px">
+  <p><em>Try to maintain the natural creases that occur as skin is pushed against skin</em></p>
+  <p>Smoothing will only get you so far though, and you will, without a doubt, need to go in and manually direct the vertices to where you want them to sit between the joints. To do this, I like to (if possible), lock all but 2 joints, set the Paint operation to Add and with a very low value (usually between 0.1 and 0.25), I will start to add very small amounts of influence to a vertex. If I have given too much, I can simply select the other unlocked influence object and paint the influence back to the vertex.</p>
+  <p>I also like to use the Component Editor as it clearly describes how much influence the joints have over a vertex. To use this tool, select a few vertices and go Windows > General Editors > Component Editor. Scroll to the Smooth Skins tab and on the left-hand side, you should see a list of all the selected vertices. Running horizontally, you should find all the joints that influence a specific vertex and also how much they influence the vertex. Here you can go in and punch values into the boxes to edit the influence. This tool becomes very handy with unruly vertices of which there are usually many. Again, this is all a very time-consuming process but it's really not worth cutting corners if you want a mesh that deforms well.</p>
+  <img src="resources/img/Smoothing out the weights_3.jpg" alt="Smoothing out the weights_3.jpg" width="100px">
+  <p><em>Using the Component Editor to refine the weights and push and pull the vertices into position</em></p>
+  </section>
+
+  <section>
+  <h2>Skinning the shoulder region</h2>
+
+  <p>I always find that the shoulder region needs the most attention to get right, or as close to right as possible. This region has many joints that come together, and getting the balance right of how much influence each joint has over the vertices can be a tricky one. In this rig, we have the clavicle, the scapula, the shoulder, the upper arm, the spine joints and also the neck joints at play.</p>
+  <p>With this many joints, I like to simplify the area first and then add more complexity to it. For example, I first got rid of any influence the scapula and the clavicle had to the surrounding vertices. I then focused the weighting between the shoulder, the upper arm and the spine joints. I animated some poses, making sure to take into consideration the scapulohumeral rhythm, which describes the relationship between the scapula and the humerus as the arm is elevated. I then continued to refine the weights between these joints and then introduced the scapula and the clavicle with the Paint mode set to Add and a very small Value.</p>
+  <img src="resources/img/Skinning the shoulder region.jpg" alt="Skinning the shoulder region.jpg" width="100px">
+  <p><em>The weights for the shoulder, the clavicle and 2 spine joints</em></p>
+  <p>You'll probably want to look at yourself in the mirror here and there as you paint the weights to see if the forms are being pushed and pulled in the right direction. Later on, we'll be adding corrective shapes to improve what we have but we should still be aiming to get the best results we can from painting the weights.</p>
+  <img src="resources/img/Skinning the shoulder region_2.jpg" alt="Skinning the shoulder region_2.jpg" width="100px">
+  <p><em>The current deformation from rotating the shoulder and the upper arm controls. This will be pushed further with corrective blendshapes next time</em></p>
+  </section>
+
+  <section>
+  <h2>Cleanup, mirror and wrap</h2>
+
+  <p>Hopefully you should be coming to a stage where you are close to finishing the skinning. You may, however, find that you are still unable to work out a few kinks and no amount of weight painting fixes the issue. Luckily, Maya has a very handy tool called the Weight Hammer that is useful for taking care of those pesky vertices. Simply select a vertex or a group of vertices, edges or faces and go Skin > Edit Smooth Skin > Weight Hammer. I usually find it best to put the mesh into a pose when using this tool as the results are a lot clearer. What this tool does is look at the neighboring vertices and assign a similar weight. It's very useful for adding the final level of polish.</p>
+  <img src="resources/img/Cleanup, mirror and wrap.jpg" alt="Cleanup, mirror and wrap.jpg" width="100px">
+  <p><em>The Weight Hammer can be very useful to tidy up unruly vertices</em></p>
+  <p>Once you are happy with the weights, mirror them over using the same settings as described in Step 4. The next thing we need to do is pop some pants on this chap as he'll get arrested otherwise. To have the pants deform well with the main body, we could simply skin the pants to the relevant joints but let's try something different. Let's go with the Wrap Deformer. Simply, select the pants geometry, shift-select the main mesh and go Create Deformers > Wrap. If the results are not to your liking, feel free to skin the pants and here's a quick tip if doing so. First, bind the pants to all the same joints that you did to the body. Then select the main mesh, shift-select the pants geometry and go Skin > Edit Smooth Skin > Copy Skin Weights. Test out the results by rotating the hip and the leg controls.</p>
+  <img src="resources/img/Cleanup, mirror and wrap_2.jpg" alt="Cleanup, mirror and wrap_2.jpg" width="100px">
+  <p><em>Using the Wrap deformer to cover up his modesty</em></p>
+  </section>
+
+  <section>
+  <h2>Skinning the eyes and the nails</h2>
+
+  <p>We now need to skin the eyes and the nails. We could simply parent them to their closest joint but I prefer to skin them as it keeps things consistent and I can leave them within their current hierarchy. For each nail, I select the closest joint and bind them together. For example l_pinkyNail_geo was skinned only to l_pinkyD_jnt, l_ringToeNail_geo to l_ringToeD_jnt and so on. The eyeballs got the same treatment by being skinned solely to the eye joint.</p>
+  <p>With everything skinned, I strongly suggest that you pop the character into more extreme poses to see how the skinning holds up. Keep improving the skinning in these extreme poses and when you think it cannot be pushed any further, give yourself a well-earned break.</p>
+  <p>Next time, we'll add corrective shapes to fix any problem areas and also create a further sense of an underlying structure. Till then, happy skinning.</p>
+  <img src="resources/img/Skinning the eyes and the nails.jpg" alt="Skinning the eyes and the nails.jpg" width="100px">
+  <p><em>Skinning the fingernails to individual joints</em></p>
+  <iframe title="vimeo-player" src="https://player.vimeo.com/video/96899864?h=4642366ac9" width="640" height="380" frameborder="0" allowfullscreen></iframe>
+  </section>
+
+</div>
+</body>
+</html>

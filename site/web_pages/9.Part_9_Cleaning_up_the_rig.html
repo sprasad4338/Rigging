@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<title>Introduction to rigging in Maya - Part 9 - Cleaning up the rig</title>
+
+<link rel="stylesheet" type="text/css" href="resources/css/rigging.css">
+</head>
+<body>
+<div class="">
+  <header>
+  <nav>
+  <div>
+  <table>
+  <tr>
+  <td>
+  <label for="sel">section:</label>
+  </td>
+  <td>
+  <select id="sel">
+  <option>Creating the global SRT control</option>
+  <option>Fixing the scapula and the forearm</option>
+  <option>FK IK control visibility</option>
+  <option>Re-designing the IK torso controls</option>
+  <option>Tidying up the control attributes</option>
+  <option>Almost there – cleaning up the Outliner</option>
+  <option>Top tip: Adding limits to your controls</option>
+  </select>
+  </td>
+  </tr>
+  </table>
+  </div>
+  </nav>
+
+  <div>
+  <h1>Introduction to rigging in Maya - Part 9 - Cleaning up the rig</h1>
+
+  <img src="resources/img/Introduction to rigging in Maya - Part 9 - Cleaning up the rig.jpg" alt="Introduction to rigging in Maya - Part 9 - Cleaning up the rig.jpg" width="100px">
+  </div>
+  </header>
+
+  <section>
+  <h2>Tutorial assets</h2>
+
+  <p>Click <a href="https://assets.3dtotal.com/tutorial-resources/1869-tid-3dt-rigging-zip.fsug3b.zip">here</a> to download assets to accompany this tutorial</p>
+  </section>
+
+  <section>
+    <h2>Previous chapters</h2>
+
+    <p><a href="1.Part_1_Introduction.html" target="_blank">Maya rigging: Introduction to rigging</a></p>
+    <p><a href="2.Part_2_Rigging_a_human_torso.html" target="_blank">Maya rigging: Introduction to rigging a human torso</a></p>
+    <p><a href="3.Part_3_Rigging_the_neck_and_head.html" target="_blank">Maya rigging: Introduction to rigging the neck and the head</a></p>
+    <p><a href="4.Part_4_Rigging_the_shoulders_and_arms.html" target="_blank">Maya rigging: Introduction to rigging the shoulder and the arms</a></p>
+    <p><a href="5.Part_5_Rigging_the_hands.html" target="_blank">Maya rigging: Introduction to rigging the hands</a></p>
+    <p><a href="6.Part_6 _Rigging_the_legs.html" target="_blank">Maya rigging: Introduction to rigging the legs</a></p>
+    <p><a href="7.Part_7 _Rigging_the_feet.html" target="_blank">Maya rigging: Introduction to rigging the feet</a></p>
+    <p><a href="8.Part_8_Rigging_the_fingers_and_thumbs.html" target="_blank">Maya rigging: Introduction to rigging the fingers and thumbs</a></p>
+    <p>At this stage, the bulk of the rig is almost complete and soon enough, we'll be able to luxuriate in the joys of skinning (said with heavy sarcasm). However, before doing so, we need to go through and check the rig with a fine-toothed comb. We need to check that we are getting the correct behavior in our rotations, that no joint is flipping out of place and we'll also want to lock and hide any attributes that we do not want the animator to use. Adding to this, we will set the visibility of the FK and IK controls to show themselves when the relevant mode is enabled and also create a main control (the globalSRT) that will allow the animator to place the character in its initial starting position for a shot. Lastly, we will want to hide objects in the Outliner that an animator will not need. This stage may seem slightly mundane, but for me it makes the difference between a finished rig and an unfinished rig.</p>
+    <p>So, without further ado, let's do some digital housework…</p>
+    <iframe title="vimeo-player" src="https://player.vimeo.com/video/95866104?h=940ab979aa" width="640" height="380" frameborder="0" allowfullscreen></iframe>
+    <p><em>Cleaning the rig</em></p>
+  </section>
+
+  <section>
+  <h2>Creating the global SRT control</h2>
+
+  <p>Before creating the globalSRT control, let's do a little tidying up of the Outliner. Start by selecting l_leg_rig_grp and r_leg_rig_grp and hit Ctrl+G. Rename that new group leg_rig_grp. Now select l_arm_rig_grp and r_arm_rig_grp, group them together and rename that group arm_rig_grp. Next, parent eyes_ctrl_offset, COG_ctrl_offset and spine_doNotTouch_grp under torso_jnt_grp. Then rename torso_jnt_grp to torso_rig_grp as that will make more sense to what that group holds. Now take the following 4 groups: torso_rig_grp, leg_rig_grp, arm_rig_grp and follow_loc_grp and hit Ctrl+G. Rename this new group rig_grp.</p>
+  <img src="resources/img/Creating the global SRT control_1.jpg" alt="Creating the global SRT control_1.jpg" width="100px">
+  <p><em>Kicking things off by cleaning up the Outliner</em></p>
+  <p>Let's now create the globalSRT control. We could create a new shape for this but instead, I am just going to duplicate and re-use a control we already have. So select COG_ctrl and hit Ctrl+D. Then hit Shift+P to un-parent it from its current hierarchy, and then delete all the nodes living underneath it. Rename this control globalSRT_ctrl and then go Modify > Center Pivot. Turn on the viewport grid, hold the X-key on the keyboard to activate Snap to Grid, and snap it to the center of the world. With the control still selected, in the Channel Box, go Edit > Channel Control and set all the Scale attributes as Keyable. When they pop back into the Channel Box, hold down the RMB and go Unlock Selected. Now go Modify > Freeze Transformations, making sure Translate, Rotate and Scale are all active in the options box. To re-scale and re-position the control shape, hit F8, and do so in component mode. To be honest, after all that, it would have been quicker to create a fresh new control! Never mind.</p>
+  <p>Now take the globalSRT_ctrl and hit Ctrl+G twice. Rename the groups from topmost group globalSRT_ctrl_offset and the next group down globalSRT_ctrl_auto. Next, parent rig_grp under globalSRT_ctrl. The last thing to do is to take both the male_geo_grp and globalSRT_ctrl_offset, group them together and rename this group char_male.</p>
+  <img src="resources/img/Creating the global SRT control_2.jpg" alt="Creating the global SRT control_2.jpg" width="100px">
+  <p><em>The global_SRT control in place and the rig_grp parented under it in the Outliner</em></p>
+  </section>
+
+  <section>
+  <h2>Fixing the scapula and the forearm</h2>
+
+  <p>Currently, we have a few issues with the scapula and the forearm caused by the rotations of the torso and the wrist respectively. Starting with the scapula, we can fix this by reworking the current expression that we created a while back. So, go Windows > Animation Editors > Expression Editor and look for l_scapula_expr. You may need to change the Select Filer to By Expression Name to bring up the list of current expressions. Edit the expression to read like so and we should be good to go:</p>
+  <p>l_scapula_ctrl_auto.rotateX = -1 * l_shoulder_ctrl.rotateZ * l_scapula_ctrl.autoScapula;</p>
+  <p>What this does now, is drive the motion of the scapula through the l_shoulder_ctrl rather than the l_should_jnt. Hit Edit to update the expression and update r_scapula_expr with the following expression:</p>
+  <p>r_scapula_ctrl_auto.rotateX = -1 * r_shoulder_ctrl.rotateZ * r_scapula_ctrl.autoScapula;</p>
+  <img src="resources/img/Fixing the scapula and the forearm_1.jpg" alt="Fixing the scapula and the forearm_1.jpg" width="100px">
+  <p><em>The original scapula setup resulted in the controls going off model</em></p>
+  <p>Let's fix the forearm twist now. Again, open up the Expression Editor and edit the l_armTwist_expr to read like so:</p>
+  <p>l_upperArmTwistA_jnt.rotateY = l_lowerArm_jnt.rotateY * .25</p>
+  <p>l_upperArmTwistB_jnt.rotateY = l_lowerArm_jnt.rotateY * .5</p>
+  <p>l_upperArmTwistC_jnt.rotateY = l_lowerArm_jnt.rotateY * .75</p>
+  <p>l_lowerArmTwistA_jnt.rotateY = l_palm_ctrl.rotateY *.25</p>
+  <p>l_lowerArmTwistB_jnt.rotateY = l_palm_ctrl.rotateY *.5</p>
+  <p>l_lowerArmTwistC_jnt.rotateY = l_palm_ctrl.rotateY *.75</p>
+  <p>And the r_armTwist_expr like so:</p>
+  <p>r_upperArmTwistA_jnt.rotateY = r_lowerArm_jnt.rotateY * .25</p>
+  <p>r_upperArmTwistB_jnt.rotateY = r_lowerArm_jnt.rotateY * .5</p>
+  <p>r_upperArmTwistC_jnt.rotateY = r_lowerArm_jnt.rotateY *</p>
+  <p>r_lowerArmTwistA_jnt.rotateY = r_palm_ctrl.rotateY *.25</p>
+  <p>r_lowerArmTwistB_jnt.rotateY = r_palm_ctrl.rotateY *.5</p>
+  <p>r_lowerArmTwistC_jnt.rotateY = r_palm_ctrl.rotateY *.75</p>
+  <p>Again, we have just replaced the control to drive the forearm twist as opposed to the joint. Job done.</p>
+  <p>The last thing I want to do is add a few extra attributes that will allow the animator to turn the automated twist features that we have set up off and on. I'll explain how I set it up for the left arm here but the same approach was used for the right arm and both of the legs. Okay, so start by selecting both l_palm_ctrl and r_palm_ctrl and go Modify > Add Attribute. Create the first attribute with a Long name of upperArmTwist, with a Data Type of Float, in Minimum of 0, a Maximum of 1 and a Default of 0. Using the same values, create a second attribute with a Long name of foreArmTwist. What we want to do now is take our current expression that creates the arm twist and simply multiply it by the new attribute. So, back in the Expression Editor, edit l_armTwist_expr to read like so:</p>
+  <p>l_upperArmTwistA_jnt.rotateY = l_lowerArm_jnt.rotateY * .25 * l_palm_ctrl.upperArmTwist;</p>
+  <p>l_upperArmTwistB_jnt.rotateY = l_lowerArm_jnt.rotateY * .5 * l_palm_ctrl.upperArmTwist;</p>
+  <p>l_upperArmTwistC_jnt.rotateY = l_lowerArm_jnt.rotateY * .75 * l_palm_ctrl.upperArmTwist;</p>
+  <p>l_lowerArmTwistA_jnt.rotateY = l_palm_ctrl.rotateY *.25 * l_palm_ctrl.foreArmTwist;</p>
+  <p>l_lowerArmTwistB_jnt.rotateY = l_palm_ctrl.rotateY *.5 * l_palm_ctrl.foreArmTwist;</p>
+  <p>l_lowerArmTwistC_jnt.rotateY = l_palm_ctrl.rotateY *.75 * l_palm_ctrl.foreArmTwist;</p>
+  <p>Test it out to make sure it works and repeat the setup for the right arm and the legs. A quick note: as the controls of the IK and the FK legs will not always be visible, I ended up housing the attributes to drive the leg twist on hip_FK_ctrl.</p>
+  <img src="resources/img/Fixing the scapula and the forearm_2.jpg" alt="Fixing the scapula and the forearm_2.jpg" width="100px">
+  <p><em>Updating the expressions to get a more desirable behavior and add the ability to turn the automated features off and on</em></p>
+  </section>
+
+  <section>
+  <h2>FK IK control visibility</h2>
+
+  <p>We now want to play with the visibility of the FK and the IK controls so they are only visible when we are in that mode. We'll cover the left arm here but the process can be repeated for all the limbs. Start by selecting l_upperArm_FK_ctrl, l_elbow_ctrl and l_arm_IK_ctrl and go Animate > Set Driven Key > Set. This should load the three controls into the Driven box. Then select fkIkSwitch_ctrl and hit Load Driver in the SDK window. Select L_Arm in the top-right window and set the L Arm attribute to 0 (FK mode) for the fkIkSwitch_ctrl. Now select l_elbow_ctrl, l_arm_IK_ctrl and set the Visibility attribute of both controls to 0. Now in the bottom-left box of the SDK window, highlight all 3 driven objects, highlight Visibility in the bottom-right box and make sure L Arm Is still highlighted in the top-right window. With all the relevant objects and attributes set and highlighted, hit Key on the SDK window. Now set the L Arm attribute to 1 (IK mode), turn off the Visibility for l_upperArm_FK_ctrl and turn on the Visibility for l_elbow_ctrl and l_arm_IK_ctrl. Highlight all the relevant objects and attributes in the SDK window and hit Key once more. The fkIkSwitch should now be driving the visibility for the left arm controls. Repeat the step for the right arm and the legs.</p>
+  <img src="resources/img/FK IK control visibility.jpg" alt="FK IK control visibility.jpg" width="100px">
+  <p><em>Using Set Driven Keys to control the visibility of the FK and the IK controls</em></p>
+  </section>
+
+  <section>
+  <h2>Re-designing the IK torso controls</h2>
+
+  <p>This is not an absolutely necessary step, but one thing that had been niggling me for a while is the shape of the IK controls for the torso. Currently they are rounding-squares while all the other IK controls are more box-like. So, if you are happy with the look of your controls, feel free to skip this step. If you are not, here is a quick breakdown of how I rebuilt the controls. I'll explain how I rebuilt the hip_IK_ctrl but you can simply repeat the step for the midSPine_IK_ctrl and chest_IK_ctrl.</p>
+  <p>First I duplicated l_arm_IK_ctrl_offset and un-parented it from the hierarchy. I renamed this control hierarchy from top to bottom as so: hip_IK_ctrl_offset1, hip_IK_ctrl_auto1 and hip_IK_ctrl1. The 1 is just a temporary thing so it does not clash with the current control. Next, I parented hip_IK_ctrl_offset1 under the original hip_IK_ctrl, zeroed out the translate and rotate attributes so it snapped into place and then hit Shift+P to un-parent it. Then I went into component mode (F8) and re-worked the shape of the control. I then brought back the rotation attributes with the Channel Control in the Channel Box and then deleted the 2 unnecessary attributes, Elbow Twist and Arm Twist.</p>
+  <p>Now, parent hip_FK_ctrl_offset under hip_IK_ctrl1 (our new control). Next parent hip_IK_ctrl_offset1 under COG_ctrl. You can now delete the original hip IK control, hip_IK_ctrl. You can also now delete the 1 that hangs on the end of the new hip IK control. Next, select in this order, hip_IK_ctrl, hip_IK_jnt and go Constrain > Parent. Everything should be back to the way it was now, and you can repeat this for the midSpine_IK_ctrl and chest_IK_ctrl.</p>
+  <p>Once you have all 3 controls re-created, select spine_IK and scroll down to the Advanced Twist Controls tab. Here you will find that the World Up Object and World Up Object 2 have disappeared. Simply type hip_IK_ctrl into the first slot and chest_IK_ctrl into the second slot and you should be good to go.</p>
+  <img src="resources/img/Re-designing the IK torso controls.jpg" alt="Re-designing the IK torso controls.jpg" width="100px">
+  <p><em>Re-designing the IK torso controls</em></p>
+  </section>
+
+  <section>
+  <h2>Tidying up the control attributes</h2>
+
+  <p>The next thing that I want to do is go through every control and lock and hide any attributes that I do not want the animator to use. Start by selecting the l_knee_ctrl, r_knee_ctrl, l_elbow_ctrl, r_elbow_ctrl and in the Channel Box, highlight all the rotate attributes and the visibility. Hold down the RMB and go Lock and Hide Selected. Select l_arm_IK_ctrl, r_arm_IK_ctrl, l_leg_IK_ctrl, r_leg_IK_ctrl and also lock and hide the visibility.</p>
+  <p>Moving on to the FK controls for the leg. Select l_upperLeg_FK_ctrl, l_lowerLeg_FK_ctrl, l_ankleTwist_FK_ctrl, l_ball_FK_ctrl, r_upperLeg_FK_ctrl, r_lowerLeg_FK_ctrl, r_ankleTwist_FK_ctrl, r_ball_FK_ctrl and lock and hide the visibility. Select all the toe controls for both feet and lock and hide the translate, the scale and the visibility attributes.</p>
+  <p>Working up the torso now, select hip_FK_ctrl, hip_IK_ctrl, COG_ctrl, midSpine_IK_ctrl, chest_IK_ctrl, spineA_FK_ctrl, spineB_FK_ctrl, spineC_FK_ctrl and lock and hide the visibility. Also lock and hide the visibility for both clavicle controls, the shoulder controls, the scapula, the eye controls and the neck and head controls. Lastly for all the FK arm controls and the finger controls, it should be a case of locking and hiding the visibility.</p>
+  <img src="resources/img/Tidying up the control attributes.jpg" alt="Tidying up the control attributes.jpg" width="100px">
+  <p><em>Lock and hide any attributes you do not want the animator to key</em></p>
+  </section>
+
+  <section>
+  <h2>Almost there – cleaning up the Outliner</h2>
+
+  <p>The final round of housework is to clean up the Outliner. At the moment, if you go Display > Show All, there will be many parts of the rig on display in the viewport that we do not want others to get their dirty mitts on. So let's reveal everything and then lock and hide objects we do not want on show. Start by going to your Viewport menu and go Show > All. Next, do a marquee selection over the entire character and you'll find that we have been able to select many joints by doing so. With those joints still selected, add them to the jnt_layer that we have already set up.</p>
+  <p>Now, go Display > Show All to reveal everything and then in the Viewport menu, hide the NURBS Curves and the Polygons. Again, do a marquee selection over the entire character and this time you'll notice that you have all the effectors selected. With those effectors selected, set the visibility to 0 and then hold down the RMB and go Lock and Hide Selected. Create another marquee selection and you should now have the FK and IK joints selected. Again, turn off the Visibility attribute and then go Lock and Hide Selected. Repeat the process again until you are unable to select anything in the viewport. Then, go through the Outliner and look for any objects you wish not to be visible. I ended up selecting l_hip_IK_ctrl, r_hip_IK_ctrl, all the IK handles, the effectors, the spine_CRV, the locators for the reverse foot, the locators that enable the space-switching, and did the same.</p>
+  <p>Next time, we'll dive into the deep, dark world of skinning.Happy rigging.</p>
+  <img src="resources/img/Almost there – cleaning up the Outliner.jpg" alt="Almost there – cleaning up the Outliner.jpg" width="100px">
+  <p><em>Making sure the essentials are hidden in the Outliner</em></p>
+  <iframe title="vimeo-player" src="https://player.vimeo.com/video/95866104?h=940ab979aa" width="640" height="380" frameborder="0" allowfullscreen></iframe>
+  </section>
+
+  <section>
+  <h2>Top tip: Adding limits to your controls</h2>
+
+  <p>One thing I tend not to do is add limits to my controls. This is because I like to give the animator the freedom to push the rig to the limits to attain extreme poses. Also, sometimes you'll find that pushing a pose beyond an extreme for the odd frame here and there can sometimes add more vitality and umph to an action, which is another reason for lending the animator this freedom. If you do wish to put limits onto your controls, however, you can do so by selecting the control and in the Attribute Editor, scroll to the transform tab (the far left tab) and navigate down to Limit Information.</p>
+  <img src="resources/img/Adding limits to your controls.jpg" alt="Adding limits to your controls.jpg" width="100px">
+  <p><em>Where to find the attributes to add limits to your controls</em></p>
+  </section>
+
+  <section>
+  <h2></h2>
+
+  <p></p>
+  </section>
+</div>
+</body>
+</html>

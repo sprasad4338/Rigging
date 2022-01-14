@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<title>Introduction to rigging in Maya - Part 11 - Corrective blendshapes</title>
+
+<link rel="stylesheet" type="text/css" href="resources/css/rigging.css">
+</head>
+<body>
+<div class="">
+  <header>
+  <nav>
+  <div>
+  <table>
+  <tr>
+  <td>
+  <label for="sel">section:</label>
+  </td>
+  <td>
+  <select id="sel">
+  <option>Using the scripts</option>
+  <option>Correcting the wrist – flexion</option>
+  <option>Mirror the corrective shapes</option>
+  <option>Applying the blend shapes</option>
+  <option>Correcting the wrist – extension</option>
+  <option>Using SDKs to drive the blend shapes</option>
+  <option>Creating the bicep bulge</option>
+  <option>Using Mudbox and Maya to correct the shape</option>
+  <option>Driving the bicep bulge</option>
+  <option>Extension of the arm</option>
+  <option>Corrective shapes for the shoulder</option>
+  <option>Corrective shapes for the torso and the legs</option>
+  <option>Creating a symmetrical mesh</option>
+  <option>Different tools to try out</option>
+  </select>
+  </td>
+  </tr>
+  </table>
+  </div>
+  </nav>
+
+  <div>
+  <h1>Introduction to rigging in Maya - Part 11 - Corrective blendshapes</h1>
+
+  <img src="resources/img/Introduction to rigging in Maya - Part 11 - Corrective blendshapes.jpg" alt="Introduction to rigging in Maya - Part 11 - Corrective blendshapes.jpg" width="100px">
+  </div>
+  </header>
+
+  <section>
+  <h2>Tutorial assets</h2>
+
+  <p>Click <a href="https://legacy.3dtotal.com/admin/new_cropper/tutorial_resources/final_3dt_rigging.zip">here</a> to download assets to accompany this tutorial</p>
+  </section>
+
+  <section>
+    <h2>Previous chapters</h2>
+
+    <p><a href="1.Part_1_Introduction.html" target="_blank">Maya rigging: Introduction to rigging</a></p>
+    <p><a href="2.Part_2_Rigging_a_human_torso.html" target="_blank">Maya rigging: Introduction to rigging a human torso</a></p>
+    <p><a href="3.Part_3_Rigging_the_neck_and_head.html" target="_blank">Maya rigging: Introduction to rigging the neck and the head</a></p>
+    <p><a href="4.Part_4_Rigging_the_shoulders_and_arms.html" target="_blank">Maya rigging: Introduction to rigging the shoulder and the arms</a></p>
+    <p><a href="5.Part_5_Rigging_the_hands.html" target="_blank">Maya rigging: Introduction to rigging the hands</a></p>
+    <p><a href="6.Part_6 _Rigging_the_legs.html" target="_blank">Maya rigging: Introduction to rigging the legs</a></p>
+    <p><a href="7.Part_7 _Rigging_the_feet.html" target="_blank">Maya rigging: Introduction to rigging the feet</a></p>
+    <p><a href="8.Part_8_Rigging_the_fingers_and_thumbs.html" target="_blank">Maya rigging: Introduction to rigging the fingers and thumbs</a></p>
+    <p><a href="9.Part_9_Cleaning_up_the_rig.html" target="_blank">Maya rigging: Introduction to cleaning up the rig</a></p>
+    <p><a href="10.Part_10_Skinning.html"target="_blank">Maya rigging: Introduction to skinning</a></p>
+    <p><strong>During this tutorial we will be adding corrective blend shapes on top of the skinning we did previously. Blend shapes will allow us to push deformation much further than can be achieved through skinning alone. Before blend shapes can be added, however, it is essential that the skinning is as refined as you can get it in order to provide sound foundations for your additional work; corrective blend shapes are not a solution for overly hasty skinning.</strong></p>
+    <p>To speed up the process of creating the corrective blend shapes, we'll be using 2 scripts: the <a href="http://www.supercrumbly.com/">abSymMesh.mel script by Brendan Ross</a> and the <a href="http://www.b-ling.com/">BSpiritCorrectiveShape.mel script by Christian Breitling</a>. I'd like to thank both Brendan and Christian for giving me permission to use and also supply the scripts for this tutorial as they proved to be lifesavers. For the most part, we'll be using the general Maya tools to re-work the poses but I'll also demonstrate how you can use Mudbox to aid the process. Maya plus the use of scripts or plug-ins work fine, but sometimes I find it easier to use the sculpt tools that Mudbox or indeed ZBrush offer to correct a pose.</p>
+  <section>
+  <h2>Using the scripts</h2>
+
+  <p>Before cracking on, I just want to make a quick note of some of the changes I've made since last time. Firstly, I've deleted the history (Edit > Delete by Type > History) from the pants, which will in turn kill off the Wrap Deformer. There was nothing wrong with using the Wrap Deformer at this time, I just wanted to keep the scene as light as possible for now. I can always add this later on or I may even consider using a cloth setup to add more believability to the pants. I've also spent a further hour or so, refining the weights for the main mesh by using the Weight Hammer tool to push some of the pesky vertices back into shape.</p>
+  <p>Now a quick explanation of the 2 scripts we will use. The first script is the abSymMesh.mel script by Brendan Ross. At the click of a button, this script will allow you to build symmetrical blend shapes, check that your model is symmetrical and much more. Here's a quick breakdown on how to run and use the script. In the Script Editor (Window > General Editor), create a new MEL tab (Ctrl+T > MEL), go File > Load Script and then select abSymMesh.mel. (You'll find this in the Scripts folder within the project directory supplied with this tutorial). With the script loaded, hit Ctrl+A to highlight all the text and then hit Enter on the Numpad to source the script. Now highlight the words 'abSymMesh' on the second line of the script and hit Enter on the Numpad to create the GUI. If you like, you can also MMB-drag the highlighted text (abSymMesh) onto a Shelf so you no longer need to pop into the Script Editor to run it. We'll cover how to use the script later on when we come to creating our corrective blend shapes.</p>
+  <p>The next script is the BSpiritCorrectiveShape.mel script by Christian Breitling. This tool will allow us to pose our mesh into a problematic position, sculpt the corrective fix in that problematic pose, and then through some vertex magic, it will extract the difference between the vertices of the bind pose and the vertices that have since been affected, to create the corrective pose. Hopefully, I've explained that clearly, if not, check out the video that will give you a better example of what the script does. Load the BSpiritCorrectiveShape.mel script into a MEL tab in the Script Editor, highlight all the text and hit Enter on the Numpad to source it. To run this script, we'll need to have 2 meshes selected (the corrective pose and the original pose) and then we'll need to run the 'BSpiritCorrectiveShape' command. If you like, you can also MMB-drag this command onto the Shelf to speed up the process of running the script. The process will be more fully explained as we go through the tutorial.</p>
+  <p>If your mesh is not symmetrical, forward to Top Tip 1 which covers how to make it so.</p>
+  <img src="resources/img/Using the scripts.jpg" alt="Using the scripts.jpg" width="100px">
+  <p><em>The two scripts that we will be using in this tutorial to speed up the process of creating corrective blend shapes</em></p>
+  </section>
+
+  <section>
+  <h2>Correcting the wrist – flexion</h2>
+
+  <p>To pose the mesh into the troubled poses, I will only be using the FK controls. This will allow me to isolate which rotational axis of a given joint creates the pose and can therefore be used to drive the corrective fix. In the case of the wrist, it's mainly when I create flexion and extension (Rotate Z), that we seem to lose volume in the region. So start by rotating the l_palm_ctrl by -70 degrees on the Z-axis and then duplicate the mesh by hitting Ctrl+D with the character in that pose. With the duplicated mesh selected, highlight all the translate, rotate and scale attributes, hold down the RMB and go Unlock Selected. You should now be able to translate the duplicated mesh back so it does not sit on top of the original mesh.</p>
+  <p>Now push and pull the vertices to correct the pose. I tend to use a combination of simply moving vertices around, mainly with Soft Selection active (hit B on the keyboard to activate/deactivate) or by using the Sculpt Geometry Tool which you will find under Mesh. Setting the Operation to Relax or Smooth on the Sculpt Geometry Tool is a great way to even out or smooth the faces in a particular region.</p>
+  <p>Once you are happy with the corrective fix, select in this order: the corrective shape fix, then the original mesh and run the 'BSpiritCorrectiveShape' command. Once it has performed its magic, a new geometry should be created and this will be the model we will apply as a blend shape. Delete the mesh we originally duplicated to create the corrective fix and then rename the newly created mesh l_wrist_rZm70. The reason I've called it what I have is because this will inform me that it is a corrective problem of the left wrist (l_wrist), I have rotated it on the Z axis (rZ) and the rotational value is -70 (m70). You can come up with your own naming convention if you wish but I find this works for me. Now with l_wrist _rZm70 selected, hit Shift+P to un-parent it from its current location in the hierarchy.</p>
+  <img src="resources/img/Correcting the wrist – flexion.jpg" alt="Correcting the wrist – flexion.jpg" width="100px">
+  <p><em>The original wrist pose and using Soft Selection to correct the wrist</em></p>
+  </section>
+
+  <section>
+  <h2>Mirror the corrective shapes</h2>
+
+  <p>To create the corrective equivalent for the right palm, duplicate l_wrist _rZm70 and rename it r_wrist _rZm70. Run the abSymMesh.mel script to load up the GUI which we will use to mirror the corrective pose. If you have not already, select the male_geo (make sure it is back in the default pose) and click the Select Base Geometry button on the abSymMesh GUI. Once it has done its magic, select r_wrist _rZm70 and hit the Flip Selected button. You should now have 2 corrective fixes, one for each wrist.</p>
+  <img src="resources/img/Mirror the corrective shapes.jpg" alt="Mirror the corrective shapes.jpg" width="100px">
+  <p><em>Using the abSymMesh tool to create the right-side corrective shape</em></p>
+  </section>
+
+  <section>
+  <h2>Applying the blend shapes</h2>
+
+  <p>Select, in this order, the 2 corrective shape fixes and then the male_geo (the default mesh). It is important that you select the object that you would like to apply the blend shapes onto last. With all 3 meshes selected, go Create Deformers > Blend Shape (Options). Call the BlendShape node 'correctives' and then switch to the Advanced tab. It is important that we set the Deformation order to either Front of chain or Parallel (I've opted for Front of chain) as we will want the blend shapes to perform before the skinCluster does its work. Once you've set those options, hit Create. If you now select the male_geo, you will now find a 'correctives' node under the INPUTS in the Channel Box or in the Attribute Editor. Open that node up and you will have a 0 to 1 attribute to drive each corrective shape. With the corrective meshes still in the scene, you can also update the fixes should you need to, and this will be propagated down to the 'corrective' blend shape node. It will be a bit much to ask the animator to open up the 'corrective' blend shape node and animate the corrective shapes, so later on we will hook them up to be driven by Set Driven Keys.</p>
+  <img src="resources/img/Applying the blend shapes.jpg" alt="Applying the blend shapes.jpg" width="100px">
+  <p><em>Applying the corrective blend shapes to our skinned mesh</em></p>
+  </section>
+
+  <section>
+  <h2>Correcting the wrist – extension</h2>
+
+  <p>Moving on, let's create a corrective shape for the extension of the wrist. Select l_palm_ctrl and set the Rotate Z to 100, duplicate the mesh and unlock the transform attributes for the duplicated mesh. Translate the duplicated mesh back and, using any tools you wish, add more volume to the wrist. Here again I used a combination of the Move tool with Soft Selection turned on and the Sculpt Geometry Tool.</p>
+  <p>Moving on, let's create a corrective shape for the extension of the wrist. Select l_palm_ctrl and set the Rotate Z to 100, duplicate the mesh and unlock the transform attributes for the duplicated mesh. Translate the duplicated mesh back and, using any tools you wish, add more volume to the wrist. Here again I used a combination of the Move tool with Soft Selection turned on and the Sculpt Geometry Tool.</p>
+  <img src="resources/img/Correcting the wrist – extension.jpg" alt="Correcting the wrist – extension.jpg" width="100px">
+  <p><em>Using the Sculpt Geometry Tool to work on the wrist</em></p>
+  </section>
+
+  <section>
+  <h2>Using SDKs to drive the blend shapes</h2>
+
+  <p>We now want to add our extra corrective blend shapes to our existing blend shape node. Select the two corrective shapes and then the male_geo mesh and this time, go Edit Deformers > Blend Shape > Add (Options). Turn on Specify node and make sure the Existing nodes are set to 'correctives'. Hit Apply and Close and you should find that the 2 new blend shapes have been added to the 'correctives' node.</p>
+  <p>We are now going to drive the blend shapes using Set Driven Keys. For the majority of the time, I'll be driving the blend shapes using the rotation of the joints, but every now and then, I'll drive them using a control. I try to have joints drive blend shapes as sometimes you may have multiple controls driving the joints. For example, the FK arm controls and the IK arm controls both drive the arm joints. Therefore, you would need both sets of controls to drive the blend shape when required. By having the blend shape driven by the joint, we know that we do not need to worry about which control triggers the corrective fix.</p>
+  <p>Select male_geo and select the 'correctives' node from the INPUTS stack in the Channel Box and go Animate > Set Driven Key > Set. This should load the 'correctives' node into the Driven portion of the SDK window. Now select l_palm_jnt and hit the Load Driver button on the SDK window. Make sure all the rotation attributes for every control is back at 0 and the blend shapes are also at 0. Now, in the top-right box of the SDK window, highlight Rotate Z; in the bottom-left window, highlight correctives and in the bottom-right window, highlight both l_wrist_rZ_m70 and l_wrist_rZ_p100. With everything highlighted, hit Key on the SDK window to set the default pose. Now rotate l_palm_ctrl (this drives the joint) and set the Rotate Z attribute to -70. On the 'correctives' node, set l_wrist_rZ_m70 to 1. Un-highlight l_wrist_rZ_p100 from the bottom-right window of the SDK tool (leave everything else as it is) and hit Key. Now set the Rotate Z attribute to 100 on the l_palm_ctrl and on the 'correctives' node, set l_wrist_rZ_p100 to 1. Back in the SDK window, this time highlight l_wrist_rZ_p100 and un-highlight l_wrist_rZ_m70. Once again, hit Key on the SDK window.</p>
+  <p>Using l_palm_ctrl, rotate the palm on the Z-axis to test if the shapes are being triggered. You may notice that there is some ease out and ease in as it goes into the corrective poses. This is due to our default animation preferences being set to Auto or Spline. To fix this, select the 'correctives' node and go Windows > Animation Editors > Graph Editor. Here you will find the animation curves for the Set Driven Keys we have just created for the wrist. You can edit the animation curve here; I've set it to Linear to get a more pleasing transition as it hits the target poses. You can also add extra in-between poses using the SDK window or by adding extra keys in the Graph Editor to have more control over how the wrist goes in and out of the corrective poses. Repeat the same for the right palm.</p>
+  <p>Before moving on to the upper arm and then the shoulder, we need to do a little parenting so our joints do not inherit any extra rotation values, which they seem to be doing at the moment. For example, if you rotate the upper arm control, you'll notice that the l_palm_jnt inherits some values. Luckily, it is a simple fix. First, parent l_palm_jnt under l_armEnd_jnt and r_palm_jnt under r_armEnd_jnt. Then parent both l_shoulder_jnt and r_shoulder_jnt under spineF_IK_jnt. And while we are here, lets parent both l_upperLeg_jnt and r_upperLeg_jnt under hip_FK_jnt.</p>
+  <img src="resources/img/Using SDKs to drive the blend shapes.jpg" alt="Using SDKs to drive the blend shapes.jpg" width="100px">
+  <p><em>Using Set Driven Keys to drive the correctives shapes for the wrist</em></p>
+  </section>
+
+  <section>
+  <h2>Creating the bicep bulge</h2>
+
+  <p>For the bicep, I have rotated l_lowerArm_FK_ctrl by 100 degrees on the X-axis. I have then duplicated the mesh, unlocked the transform attributes and again, used the basic Maya tools to add a slight bulge to the bicep and maintain the form created by the elbow. For the most part (depending on the resolution of your mesh), you should be able to fix the pose in Maya. Every now and then though, I find it easier to take the mesh into a sculpting package such as Mudbox or ZBrush and take advantage of the sculpting tools to push and pull the form.</p>
+  <p>Before exporting the mesh out of Maya, make sure to zero out the Translate values on the duplicated mesh. This will stop it from freaking out when we bring the corrective mesh back into Maya from Mudbox. Once back in the default position, go File > Export Selected and save it as an OBJ file. Call is what you like for now. I called it l_elbow_rx100.</p>
+  <img src="resources/img/Creating the bicep bulge.jpg" alt="Creating the bicep bulge.jpg" width="100px">
+  <p><em>Working on the bicep bulge with the Sculpt Geometry Tool</em></p>
+  </section>
+
+  <section>
+  <h2>Using Mudbox and Maya to correct the shape</h2>
+
+  <p>In Mudbox now, go File > Open and load in the exported OBJ file. The main Sculpt Tools I tend to use for correcting poses are the Grab, the Wax, the Fill, the Pinch and the Bulge brushes. At this stage, I'm usually looking at plenty of reference and more importantly, putting my own body into the pose (if possible) to give me an idea of how I need to push the forms. If you'd like to work non-destructively, you could use the Sculpt Layers while fixing your corrective pose. To create a new sculpt layer, click on the white paper with a green cross icon in the Layers window.</p>
+  <p>Once you are happy with the result, switch over to the Select/Move Tools tab and select the Objects tool. Select the mesh and go File > Export Selected and save it as an OBJ file. I called the mesh l_elbow_rx100fix. Head back into Maya now and import the updated mesh. You may get a little message pop up about multiple groups and so on when you import the mesh. Just click OK to this window and then pop into the Outliner and delete the extra Sets that have been created. Make sure not to delete the male_bind_set, though. If you need to, continue to refine the pose using the tools in Maya.</p>
+  <p>When you are ready, select the corrected pose, shift-select male_geo and run the 'BSpiritCorrectiveShape' command. Rename the new shape l_elbow_rX_p100 and delete the mesh we imported from Mudbox. Duplicate l_elbow_rX_p100, rename it r_elbow_rX_p100 and again, use the abSymMesh tool to create the right-hand corrective fix. Select the 2 new corrective blend shapes, followed by the male_geo and go Edit Deformers > Blend Shade > Add. Use the same settings as we used previously to add them to the 'correctives' node. Lastly, grab all the blend shapes we have created so far, group them together by hitting Ctrl+G and then rename that group correctives_geo_grp.</p>
+  <img src="resources/img/Using Mudbox and Maya to correct the shape.jpg" alt="Using Mudbox and Maya to correct the shape.jpg" width="100px">
+  <p><em>Using Mudbox to sculpt the forms of the bicep bulge</em></p>
+  </section>
+
+  <section>
+  <h2>Driving the bicep bulge</h2>
+
+  <p>Like we did for the wrist, we'll use SDKs to drive the blend shapes. To drive the bicep bulge, I am using l_lowerArm_jnt as the Driver object and the Rotate X attribute as the driver. I won't go into detail here about setting keys, etc, as it is the same workflow as covered in Step 6.</p>
+  <img src="resources/img/Driving the bicep bulge.jpg" alt="Driving the bicep bulge.jpg" width="100px">
+  <p><em>Using Set Driven Keys once more to drive the corrective shape</em></p>
+  <p>One thing I did add was an extra blend shape to give me a larger bicep bulge. The reason I added an extra bulge shape is so that we can create the full swelling of the bicep muscle during supination of the wrist. I've decided not to drive this shape with SDKs as I want to let the animator drive this corrective shape manually. Later on I'll probably hook this up to a custom attribute for the animator to turn on and off.</p>
+  <img src="resources/img/Driving the bicep bulge_2.jpg" alt="Driving the bicep bulge_2.jpg" width="100px">
+  <p><em>Supination causes the bicep to fully contract</em></p>
+  </section>
+
+  <section>
+  <h2>Extension of the arm</h2>
+
+  <p>Moving on, I want to add some contraction to the triceps as the arm is extended. Using the l_lowerArm_FK_ctrl, I posed the arm by rotating the X-axis by -20. I then duplicated the mesh, added some volume to the triceps and repeated the same workflow as for the bicep and the wrist. To drive the blend shape for the corrective shape for the triceps, I used the Rotate X-axis of the l_lowerArm_jnt and then the same again for the right-hand side.</p>
+  <img src="resources/img/Extension of the arm.jpg" alt="Extension of the arm.jpg" width="100px">
+  <p><em>Driving the triceps bulge with Set Driven Keys</em></p>
+  </section>
+  <section>
+    <h2>Corrective shapes for the shoulder</h2>
+
+    <p>Now we come to the shoulder region. I tend to create quite a few blend shapes in this region as there is always a lot going on. It's also important when working on the shoulders that there is a strong relationship between the upper arm and the shoulder and a lot of the time, you'll have to get the balance right with both parts working together. So first, I lower the upper arms and raise them to the horizontal position, creating corrective shapes for both positions. I then bring the upper arms forward and then backwards. At this stage, I'm mainly concerned about maintaining volume in the region and reducing the amount that the arm penetrates the chest. Then I focus on raising the shoulders that will in turn bring the chest inwards and up. After this, I rotate the shoulder back and add some further volume to the back. Driving the shapes, I used 2 main joints: l_upperArm_jnt and l_shoulder_jnt.</p>
+    <img src="resources/img/Corrective shapes for the shoulder.jpg" alt="Corrective shapes for the shoulder.jpg" width="100px">
+    <p><em>Correcting the area of the shoulders and the back with multiple corrective blend shapes</em></p>
+  </section>
+
+  <section>
+    <h2>Corrective shapes for the torso and the legs</h2>
+    <p>At this stage, the arms should be close to being finished. Next, we should add a few corrective blend shapes to the torso, the pelvis region and the lower leg. For the torso, I've mainly focused on adding some compression during lateral inclination.</p>
+    <img src="resources/img/Corrective shapes for the torso and the legs.jpg" alt="Corrective shapes for the torso and the legs.jpg" width="100px">
+    <p><em>Adding compression to the torso during lateral inclination</em></p>
+    <p>As the upper leg is raised, I went to town tidying up the pelvic region and softening the horrible crease that we had. Lastly, I cleaned up the lower leg by adding a corrective shape to reduce the amount the lower leg penetrated the upper leg.</p>
+    <img src="resources/img/Corrective shapes for the torso and the legs_2.jpg" alt="Corrective shapes for the torso and the legs_2.jpg" width="100px">
+    <p><em>Tidying up the results from raising the leg</em></p>
+    <p>Again, I've not gone into much detail here as the process has been covered in the previous steps. At this stage, I'm not too worried about adding every corrective pose as we can always add more during the animation process. As we animate the character, we'll also find that we may need custom corrective shapes built for a specific pose, but we'll cover this in more detail next time when we briefly look at referencing. Till then, happy corrective shape building.</p>
+    <img src="resources/img/Corrective shapes for the torso and the legs_3.jpg" alt="Corrective shapes for the torso and the legs_3.jpg" width="100px">
+    <p><em>Cleaning up the back of the knee with a corrective pose</em></p>
+  </section>
+
+  <section>
+    <h2>Creating a symmetrical mesh</h2>
+    <p>In this tip, I'm going to quickly cover how you can make your mesh symmetrical if it has some asymmetry present. As we have no clean UVs or textures for our mesh, this should be pretty straightforward. If the UVs had been created, we could do something similar, only we would need to perform some additional steps to copy the UVs from the old mesh to the new mesh.</p>
+    <p>First, duplicate the mesh you want to make symmetrical. In our case, this would be male_geo. Now, delete one-half of the mesh, select all the vertices down the middle, and pop a 0 into the X box for Absolute Transform. Now duplicate the mesh, plug a -1 into the Scale X attribute to mirror the duplicated mesh over. Select the 2 halves and go Mesh > Combine. Now select all the vertices down the center of the mesh and go Edit Mesh > Merge Vertices. A hard edge will now be evident down the center of the mesh. To get rid of the hard edge, select the mesh and go Normals > Soften Edge. Use the abSymMesh tool to check the symmetry and hopefully, everything should be hunky dory.</p>
+    <img src="resources/img/Creating a symmetrical mesh.jpg" alt="Creating a symmetrical mesh.jpg" width="100px">
+    <p><em>Making sure the vertices along the X-axis are perfectly centered</em></p>
+    <p>The next thing we need to do is skin the new mesh and then copy the skin weights over. Start by selecting all the joints in the male_bind_set and then Shift-select the new symmetrical mesh. Now go Skin > Bind Skin > Smooth Bind and use the same settings that we did for the initial bind. Now we want to copy the skin weights from our asymmetrical mesh to our new symmetrical mesh. To do so, first select the old mesh, Shift-select the new mesh and go Skin > Edit Smooth Skin > Copy Skin Weights. The default settings should do the trick just fine. Delete the asymmetrical mesh and you should be good to go.</p>
+    <img src="resources/img/Creating a symmetrical mesh_2.jpg" alt="Creating a symmetrical mesh_2.jpg" width="100px">
+    <p><em>Using the abSymMesh tool to check the symmetry of the model</em></p>
+  </section>
+
+  <section>
+    <h2>Different tools to try out</h2>
+    <p>This is not really a tip but I thought I would pop down some links to other tools to speed up the process of creating corrective blend shapes and to offer different methods of pushing skinning further.<a href="http://www.djx.com.au/blog/2013/04/14/posedeformer-for-maya-2014/">poseDeformer by Michael Comet for Maya 2014.</a></br>
+<a href="http://www.braverabbit.de/playground/?page_id=1001">Shapes by Brave Rabbit</a></br>
+<a href="http://www.lbrush.com/">LBrush by Joe Alter</a></p></br>
+  </section>
+
+  <section>
+    <h2></h2>
+  </section>
+
+  <section>
+    <h2></h2>
+  </section>
+
+  <section>
+    <h2></h2>
+  </section>
+
+</div>
+</body>
+</html>

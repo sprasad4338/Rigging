@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<title>Introduction to rigging in Maya - Part 7 - Rigging the feet</title>
+
+<link rel="stylesheet" type="text/css" href="resources/css/rigging.css">
+</head>
+<body>
+  <div class="">
+    <header>
+    <nav>
+    <div>
+    <table>
+    <tr>
+    <td>
+    <label for="sel">section:</label>
+    </td>
+    <td>
+    <select id="sel">
+    <option>Introduction</option>
+    <option>Locators, Locators, Locators</option>
+    <option>Reverse foot hierarchy</option>
+    <option>Rotating the IK foot</option>
+    <option>Foot rolling and more</option>
+    <option>Adding knee controls</option>
+    <option>Auto knee follow</option>
+    <option>Cleaning up the foot rig</option>
+    <option>Adding the toe flap</option>
+    </select>
+    </td>
+    </tr>
+    </table>
+    </div>
+    </nav>
+
+    <div>
+    <h1>Introduction to rigging in Maya - Part 7 - Rigging the feet</h1>
+
+    <img src="resources/img/Introduction to rigging in Maya - Part 7 - Rigging the feet.jpg" alt="Introduction to rigging in Maya - Part 7 - Rigging the feet.jpg" width="100px">
+    </div>
+    </header>
+
+    <section>
+    <h2>Tutorial assets</h2>
+
+    <p>Click <a href="https://assets.3dtotal.com/tutorial-resources/1857-tid-3dt-rigging-zip.4tn1p2.zip">here</a> to download assets to accompany this tutorial</p>
+    </section>
+
+    <section>
+      <h2>Previous chapters</h2>
+
+      <p><a href="1.Part_1_Introduction.html" target="_blank">Maya rigging: Introduction to rigging</a></p>
+      <p><a href="2.Part_2_Rigging_a_human_torso.html" target="_blank">Maya rigging: Introduction to rigging a human torso</a></p>
+      <p><a href="3.Part_3_Rigging_the_neck_and_head.html" target="_blank">Maya rigging: Introduction to rigging the neck and the head</a></p>
+      <p><a href="4.Part_4_Rigging_the_shoulders_and_arms.html" target="_blank">Maya rigging: Introduction to rigging the shoulder and the arms</a></p>
+      <p><a href="5.Part_5_Rigging_the_hands.html" target="_blank">Maya rigging: Introduction to rigging the hands</a></p>
+      <p><a href="6.Part_6 _Rigging_the_legs.html" target="_blank">Maya rigging: Introduction to rigging the legs</a></p>
+    </section>
+
+    <section>
+    <h2>Introduction</h2>
+
+    <p>In this tutorial, we will be finishing off the IK legs by creating the setup for the reverse foot. The reverse foot allows us to create all the necessary motion needed for a foot to plant and take off during a walk, a run or any other type of locomotion where the foot comes in contact with a ground or wall plane. We will also add extra attributes to allow the foot to twist from the heel and from the tip of the toes. Twisting from these points allows you to very easily animate a character boogying or preparing to deliver a tornado kick to the head.</p>
+    <p>Along with the reverse foot, we will also create a knee control in the same manner that we did the elbow. We will also add a feature that allows the animator to choose if he or she wishes the knee control to automatically follow the foot control or not. Having the knee control follow the foot can sometimes be useful as it is one way of minimizing the tendency for the knee to flip out. But a negative of having the knee control follow the foot is that it becomes harder to lock the knee off and hold its position. Giving the animator both options allows him or her to choose what best suits their style of animating.</p>
+    <p>So, let's play footsie…</p>
+    <iframe title="vimeo-player" src="https://player.vimeo.com/video/91595509?h=d39cd8e80d" width="640" height="380" frameborder="0" allowfullscreen></iframe>
+    </section>
+
+    <section>
+    <h2>Locators, Locators, Locators</h2>
+
+    <p>The bulk of the reverse foot will be driven through a series of locators organized in a hierarchy, allowing the foot to pivot from different positions. To create the first locator, go Create > Locator and rename it l_heel_loc. If it is a bit small, increase the Local Scale in the Channel Box, under SHAPES. We want to position this locator at the back of the foot as well as orient the locator to match the angle of the foot.</p>
+    <p>First, parent the l_heel_loc under l_ankleTwist_jnt, zero out the translate and rotate attributes and then un-parent the locator. Now translate the locator down slightly and towards the heel of the foot. To make it easier, activate Snap to Points (hold down the V key) and snap it to one of the vertices on the back of the foot.</p>
+    <p>With l_heel_loc selected, hit Ctrl+D to duplicate it and then rename it l_ball_loc. Use Snap to Points to snap it to l_ball_jnt.</p>
+    <p>You may want to hide the geometry to do this so it does not snap to any points on the mesh. Duplicate l_ball_loc and rename the new locator l_toeFlap_loc. Leave this locator in its current position. Now duplicate l_toeFlap_loc and rename it l_toeEnd_loc. Use Snap to Points to snap this locator to l_toeEnd_jnt.</p>
+    <p>We now need 2 more locators for the inside and the outside of the foot. Duplicate l_toeFlap_loc and rename it l_footInner_loc. Translate this to the widest part of the inside of the foot, then duplicate l_footInner_loc and rename it l_footOuter_loc. Position this locator on the widest part of the outside of the foot.</p>
+    <p>We should now have a total of 6 locators spread around the foot.</p>
+    <img src="resources/img/Locators, Locators, Locators.jpg" alt="Locators, Locators, Locators.jpg" width="100px">
+    <p><i>The six locators placed around the foot</i></p>
+    </section>
+
+    <section>
+    <h2>Reverse foot hierarchy</h2>
+
+    <p>Time to create the hierarchy for the foot. First parent l_footOuter_loc under l_heel_loc. Then parent l_footInner_loc under l_footOuter_loc. Now parent l_toeEnd_loc under l_footOuter_loc. Lastly, select both l_ball_loc and l_toeFlap_loc and parent them under l_toeEnd_loc.</p>
+    <p>Now it's time to parent the IK handles under the relevant locator to make the reverse foot possible. Parent l_ball_IK and l_toe_IK under l_toeFlap_loc, then parent lleg_IK under l_ball_IK. Rotate the locators to test if the hierarchy has been created correctly. We now want to create a new locator to allow us to rotate the foot from the ankle.</p>
+    <p>Go Create > Locator and rename the locator l_ankle_loc. With the new locator selected, hit Ctrl+G and call that group l_ankle_loc_offset. Parent l_ankle_loc_offset under l_ankleTwist_jnt, zero out the translate and rotate attributes and then un-parent it. Now parent l_heel_loc under l_ankle_loc and then parent l_ankle_loc_offset under l_leg_IK_ctrl.</p>
+    <img src="resources/img/Reverse foot hierarchy.jpg" alt="Reverse foot hierarchy.jpg" width="100px">
+    <p><i>The hierarchy for the reverse foot</i></p>
+    </section>
+
+    <section>
+    <h2>Rotating the IK foot</h2>
+
+    <p>To rotate the foot using the IK control, we are going to add some custom rotate attributes that will drive the rotate channels of the l_ankle_loc. To do this, select l_leg_IK_ctrl and go Modify > Add Attribute. Add the following attributes, rotX, rotY and rotZ with a Data Type of Float. Leave the Minimum, Maximum and Default parameters empty.</p>
+    <p>Now go Window > General Editor > Connection Editor. Select l_leg_IK_ctrl and hit Reload Left to load this control into the Outputs window. Then select l_ankle_loc and hit Reload Right to bring it into the Inputs window. Then connect rotX (Outputs) to rotate (Inputs) and then rotY to rotate and rotZ to rotateZ.</p>
+    <img src="resources/img/Rotating the IK foot.jpg" alt="Rotating the IK foot.jpg" width="100px">
+    <p><i>Using the Connection Editor to connect the custom rotate attributes to the l_ankle_loc rotation attributes</i></p>
+    </section>
+
+    <section>
+    <h2>Foot rolling and more</h2>
+
+    <p>Now we will take advantage of the foot locators to drive the bulk of the movement for the foot. First we need to add some attributes to hook everything up. Select l_leg_IK_ctrl and go Modify > Add Attribute. Then create the following attributes with the following parameters. All should have a Data Type of Float.</p>
+    <p>Long name: footRoll, Minimum: -10, Maximum: 10, Default: 0</p>
+    <p>Long name: heelOffset, Minimum: 0, Maximum: 10, Default: 0</p>
+    <p>Long name: ballOffset, Minimum: 0, Maximum: 10, Default: 0</p>
+    <p>Long name: toePivotOffset, Minimum: 0, Maximum: 10, Default: 0</p>
+    <p>Long name: heelTwist, Minimum: -10, Maximum: 10, Default: 0</p>
+    <p>Long name: toeTwist, Minimum:-10, Maximum: 10, Default: 0</p>
+    <p>Long name: sideToSide, Minimum:-10, Maximum: 10, Default: 0</p>
+    <img src="resources/img/Adding custom attributes to drive the reverse foot.jpg" alt="Adding custom attributes to drive the reverse foot.jpg" width="100px">
+    <p><i>Adding custom attributes to drive the reverse foot</i></p>
+    <p>Now, we will use Set Driven Keys (SDKs) to drive the locators with the newly created attributes. Open up the SDK window by going Animate > Set Driven Key > Set and load l_leg_IK_ctrl as the Driver object. Then select l_heel_loc, l_ball_loc and l_toeEnd_loc and hit Load Driver. We'll start with these 3 locators as they will drive the foot as it goes back onto its heel, rolls onto the ball and then onto the tip of the toes. This will be all the major movement needed for a run, walk and so on.</p>
+    <p>Make sure the Foot Roll attribute on the l_leg_IK_ctrl is at 0 and all the rotate channels for the locators are also at 0. Then in the top-right window of the SDK tool, highlight Foot Roll and in the bottom-left window, highlight all the driven objects. Then in the bottom left-hand window, highlight Rotate X and hit Key. We have just set a key for the default pose.</p>
+    <p>Next, set the Foot Roll attribute to -10, then select the l_heel_loc and set the Rotate X attribute to around -50. Then highlight all 3 driven objects in the SDK Window and hit Key again. Going from 0 to -10 on the Foot Roll attribute should now roll the foot back onto the heel. Now set the Foot Roll attribute to 5 and use the Rotate X on the l_ball_loc to roll the foot onto the ball. I set the Rotate X to around 40. Again, highlight all 3 driven objects in the SDK Window and hit Key.</p>
+    <p>Now set the Foot Roll attribute to 10 and zero out the rotations on the l_ball_loc. Then, set the Rotate X on the l_toeEnd_loc to a value of around 60. Highlight all 3 driven objects once more and hit Key on the SDK tool. The Foot Roll attribute should now drive the entire motion needed to plant the foot and for the foot to take off. Leave the SDK tool as it is as we will continue to use these attributes next.</p>
+    <img src="resources/img/Using the Foot Roll attribute to drive the main motion of the foot.jpg" alt="Using the Foot Roll attribute to drive the main motion of the foot.jpg" width="100px">
+    <p><i>Using the Foot Roll attribute to drive the main motion of the foot</i></p>
+    <p>Now we will use the Heel Offset, the Ball Offset and the Toe Pivot Offset attributes to allow the animator to work on top of the Foot Roll attribute, or use these 3 independent attributes instead of the one. We'll start with the Heel Offset. First make sure all the attributes on l_leg_IK_ctrl are at 0. Then in the SDK tool, highlight Heel Offset in the top-right side, highlight l_heel_loc in the bottom-left side and Rotate X in the bottom-right side window.</p>
+    <p>With everything in its original pose, hit Key on the SDK tool. Now increase the Heel Offset attribute to 10 and then use the Rotate X on the l_heel_loc to rotate the foot back onto the heel. I set it Rotate X to -50; this is the same amount as we did using the Foot Roll attribute. Hit Key on the SDK tool.</p>
+    <p>Using the same method, repeat the process for Ball Offset and Toe Pivot Offset.</p>
+    <img src="resources/img/The Offset attributes allow the animator to make fine adjustments to the Foot Roll.jpg" alt="The Offset attributes allow the animator to make fine adjustments to the Foot Roll.jpg" width="100px">
+    <p><i>The Offset attributes allow the animator to make fine adjustments to the Foot Roll</i></p>
+    <p>Next, we will handle the Heel Twist and the Toe Twist. In the SDK tool, highlight Heel Twist in the top-right window, highlight l_heel_loc in the bottom-left window and Rotate Y in the bottom-right window. With everything in the default pose, hit Key. Then increase the Heel Twist attribute to -10 and rotate the l_heel_loc inwards; I ended up setting the Rotate Y value to -50. Hit Key on the SDK tool. Then set the Heel Twist attribute to 10 and set the Rotate Y attribute to 50 on the l_heel_loc to rotate the foot outwards. Once again, hit Key on the SDK tool.</p>
+    <p>Next, we will create the ability to roll the foot to the side using the Side To Side attribute. To do this, first select l_footOuter_loc and l_footInner_loc and then hit Load Driven on the SDK tool. Highlight Side To Side in the top-left window, both driven objects in the bottom-right window and the Rotate Z attribute in the bottom-right window. Hit Key to set the default pose. Then set the Side To Side attribute to 10, set the Rotate Z on the l_footOuter_loc to -50. Make sure both driven objects are highlighted in the SDK tool and then hit Key. Now set the Side To Side attribute to -10, set the Rotate Z on the l_footInner to 50, highlight both driven objects once more in the SDK tool and hit Key.</p>
+    <p>You should now be able to use the extra attributes on the l_leg_IK_ctrl to create a wide range of poses with the foot.</p>
+    <img src="resources/img/Using the Set Driven Key window to drive the side-to-side motion.jpg" alt="Using the Set Driven Key window to drive the side-to-side motion.jpg" width="100px">
+    <p><i>Using the Set Driven Key window to drive the side-to-side motion</i></p>
+    </section>
+
+    <section>
+    <h2>Adding knee controls</h2>
+
+    <p>For the knee, we will create a similar control to that of the elbow. First select l_elbow_ctrl_offset and hit Ctrl+D to duplicate it and then Shift+P to bring it out from its current hierarchy. Then, use the Search and Replace Names tool (you'll find this under Modify) to replace _elbow with _knee. Also, get rid of the 1 on the end of the offset node. To position the control correctly, do the following: select in this order; l_upperLeg_jnt, l_lowerLeg_jnt, l_legEnd_jnt, l_knee_ctrl_offset and go Constrain > Point. Then select in this order: l_lowerLeg_jnt, l_knee_ctrl_offset and go Constrain > Aim. Now delete the 2 constraint nodes living under l_knee_ctrl_offset. You can translate l_knee_ctrl_offset along the Z-axis. Make sure you do this in Object translate mode.</p>
+    <p>To drive the knee with the control, select in this order; l_knee_ctrl, l_leg_IK and go Constrain > Pole Vector.</p>
+    <img src="resources/img/Placing the knee control correctly in Object translate mode.jpg" alt="Placing the knee control correctly in Object translate mode.jpg" width="100px">
+    <p><i>Placing the knee control correctly in Object translate mode</i></p>
+    </section>
+
+    <section>
+    <h2>Auto knee follow</h2>
+
+    <p>In this step, we will add the ability for the knee to automatically follow or not follow the foot. Start by creating a locator (Create > Locator) and rename it l_kneeFollow_loc. If you need to increase the size of the locator, remember to use the Local Scale in the Channel Box. Then parent l_kneeFollow_loc under l_ankleTwist_jnt, zero out the translate and rotate attributes in the Channel Box to snap it into place, and then un-parent the locator.</p>
+    <p>Now, we will constrain the locator to l_ankle_loc so it follows along. Select, in this order; l_ankle_loc, l_kneeFollow_loc and go Constrain > Point. Make the same selection again, in the same order and then go Constrain > Orient (Options). Set the Constrain axes to Y in the options box and hit Apply. Next, we will parent constrain l_knee_ctrl_offset to l_kneeFollow_loc. (NB I do this later on in the video).</p>
+    <p>So, select in this order: l_kneeFollow_loc, l_knee_ctrl_offset and go Constrain > Parent (Options). Make sure Maintain Offset is turned on and hit Apply. The knee control will now follow the l_leg_IK_ctrl. We want the ability to turn this on and off. To do this, we will just turn off the weight values for the 2 constraint nodes that we added.</p>
+    <p>First we need to add a new attribute to the knee. Select l_knee_ctrl and go Modify > Add Attribute. Give it a long name of kneeFollow. Make the Data Type an Enum and give it 2 Enum Names: foot and world. Now select the 2 constraint nodes that live under l_kneeFollow_loc and go Animate > Set Driven Key > Set. This should load the constraint nodes into the Driven window. Select l_knee_ctrl and hit Load Driver. Set the Knee Follow attribute to foot, highlight the pointConstraint and the orient Constraint node in the bottom-left window and L Ankle Loc 0 in the bottom-right window and hit Key. Now set the Knee Follow attribute to world, reverse the weight values on the constraint nodes and hit Key once more. You should now be able to dictate if the knee control should or should not follow the foot control.</p>
+    <img src="resources/img/Auto knee follow.jpg" alt="Auto knee follow.jpg" width="100px">
+    <p><i>Creating an attribute that allows the animator to decide if the knee control should or should not follow the movement of the foot</i></p>
+    </section>
+
+    <section>
+    <h2>Cleaning up the foot rig</h2>
+
+    <p>Start by selecting l_kneeFollow_loc and parent it under worldFollow_loc_grp. Then rename worldFollow_loc_gp to follow_loc_grp. Then parent l_knee_ctrl_offset and parent it under l_leg_rig_grp. Hide all the locators that are surrounding the foot by hitting Ctrl+H. We are not quite finished yet as we need to add the ability to bend the toes. We will do this in the next step.</p>
+    <img src="resources/img/Cleaning up the foot rig.jpg" alt="Cleaning up the foot rig.jpg" width="100px">
+    <p><i>A bit of spring-cleaning in the Outliner</i></p>
+   </section>
+
+    <section>
+    <h2>Adding the toe flap</h2>
+
+    <p>To add the ability to flap the toe, we will drive the l_toeFlap_loc with a custom attribute on the l_leg_IK_ctrl. Start by selecting l_leg_IK_ctrl and going Modify > Add Attribute. Give it a long name of toeFlap and give it a Minimum of -10, a Maximum of 10 and a Default of 0. Select l_toeFlap_loc and go Animate > Set Driven Key > Set so it loads it as a driven object. Select l_leg_IK_ctrl and hit Load Driver.</p>
+    <p>Highlight Toe Flap in the top-right window, Rotate X in the bottom-right window and hit Key. Then increase the Toe Flap attribute to 10 and rotate the l_toeFlap_loc by -40 in the X. Hit Key once more in the SDK tool. Now, set the Toe Flap to -10 and the Rotate X to 40 on the l_toeFlap_loc. Hit Key one last time on the SDK tool.</p>
+    <p>That should be the foot and the leg good to go. Next time we will go Set Driven Key crazy on the fingers. Happy rigging.</p>
+    <img src="resources/img/Adding the toe flap.jpg" alt="Adding the toe flap.jpg" width="100px">
+    <p><i>Adding the ability to raise and lower the toes</i></p>
+    <iframe title="vimeo-player" src="https://player.vimeo.com/video/91595509?h=d39cd8e80d" width="640" height="380" frameborder="0" allowfullscreen></iframe>
+    </section>
+
+    <section>
+    <h2></h2>
+
+    <p></p>
+    </section>
+
+
+  </div>
+
+</body>
+</html>
